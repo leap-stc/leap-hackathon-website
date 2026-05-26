@@ -12,8 +12,8 @@ This is a static site — no build step required.
 
 ```bash
 # Clone the repo
-git clone https://github.com/YOUR-ORG/leap-hackathon-2026.git
-cd leap-hackathon-2026
+git clone https://github.com/leap-stc/leap-hackathon-website.git
+cd leap-hackathon-website
 
 # Serve locally (Python 3)
 python3 -m http.server 8080
