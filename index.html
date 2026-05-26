@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LEAP Hackathon 2026 — Climate Resilience Through Collaborative Data Science</title>
+  <meta name="description" content="Showcasing 15 projects from 5 NYC neighborhoods exploring climate resilience through data science — from the LEAP Hackathon, January 2026.">
+  <meta property="og:title" content="LEAP Hackathon 2026">
+  <meta property="og:description" content="15 projects, 5 neighborhoods, 4 winners. NYC climate resilience through collaborative data science.">
+  <meta property="og:type" content="website">
+
+  <!-- Mapbox GL JS -->
+  <link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet">
+  <script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
+
+  <!-- Fonts + Styles -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ======== HEADER ======== -->
+  <header id="site-header">
+    <div class="header-logo">
+      <span class="wordmark">LEAP Hackathon</span>
+      <span class="tag">NYC · January 2026</span>
+    </div>
+    <nav>
+      <a href="#" data-section="map-section">Map</a>
+      <a href="#" data-section="projects-section">Projects</a>
+      <a href="#" data-section="winners-section">Winners</a>
+      <a href="#" data-section="about-section">About</a>
+      <a href="#" data-section="resources-section">Data &amp; Resources</a>
+    </nav>
+  </header>
+
+  <!-- ======== HERO ======== -->
+  <section id="hero">
+    <div class="hero-text">
+      <div class="hero-eyebrow">New York City · January 2026</div>
+      <h1 class="hero-title">
+        Climate<br><em>Resilience</em><br>Through Data
+      </h1>
+      <p class="hero-subtitle">When partners from different backgrounds come together, innovation follows.</p>
+      <p class="hero-body">
+        LEAP brought together data scientists, urban planners, community organizers, and climate researchers to tackle New York City's most pressing climate vulnerabilities across five neighborhoods — producing tools, maps, and models that communities and agencies can act on.
+      </p>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-num">15</div>
+          <div class="label">Projects</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">5</div>
+          <div class="label">Neighborhoods</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">4</div>
+          <div class="label">Winners</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-visual-inner">
+        <div class="hero-grid"></div>
+        <div class="hero-borough-tags">
+          <div class="borough-tag" data-nhood="south-bronx">
+            <span>South Bronx</span>
+            <span class="mono" style="font-size:0.62rem; opacity:0.5;">40.81°N 73.92°W</span>
+          </div>
+          <div class="borough-tag" data-nhood="red-hook">
+            <span>Red Hook, Brooklyn</span>
+            <span class="mono" style="font-size:0.62rem; opacity:0.5;">40.68°N 74.01°W</span>
+          </div>
+          <div class="borough-tag highlighted" data-nhood="east-new-york">
+            <span>East New York, Brooklyn</span>
+            <span class="mono" style="font-size:0.62rem; opacity:0.5;">40.67°N 73.88°W</span>
+          </div>
+          <div class="borough-tag" data-nhood="flushing">
+            <span>Flushing, Queens</span>
+            <span class="mono" style="font-size:0.62rem; opacity:0.5;">40.77°N 73.83°W</span>
+          </div>
+          <div class="borough-tag" data-nhood="staten-island-north">
+            <span>North Shore, Staten Island</span>
+            <span class="mono" style="font-size:0.62rem; opacity:0.5;">40.63°N 74.09°W</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== MAP SECTION ======== -->
+  <section id="map-section">
+
+    <!-- Layer Controls -->
+    <div id="map-controls">
+      <div class="control-panel">
+        <div class="control-panel-title">Map Layers</div>
+
+        <label class="layer-toggle">
+          <input type="checkbox" data-layer="neighborhoods" checked>
+          <div class="layer-dot" style="background: linear-gradient(135deg, #C8373A 50%, #1B4F8A 50%);"></div>
+          <span>Neighborhoods</span>
+        </label>
+
+        <label class="layer-toggle">
+          <input type="checkbox" data-layer="cloudburst">
+          <div class="layer-dot" style="background: #5B8DD9;"></div>
+          <span>Cloudburst Flooding</span>
+        </label>
+
+        <label class="layer-toggle">
+          <input type="checkbox" data-layer="heat">
+          <div class="layer-dot" style="background: #E85D04;"></div>
+          <span>Urban Heat</span>
+        </label>
+
+        <label class="layer-toggle">
+          <input type="checkbox" data-layer="surge2050">
+          <div class="layer-dot" style="background: #1B7FC4;"></div>
+          <span>Coastal Surge 2050s</span>
+        </label>
+
+        <label class="layer-toggle">
+          <input type="checkbox" data-layer="surge2080">
+          <div class="layer-dot" style="background: #0A3F6B;"></div>
+          <span>Coastal Surge 2080s</span>
+        </label>
+      </div>
+
+      <div class="control-panel" style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:#7A7468;line-height:1.6;">
+        Click a neighborhood<br>to explore its projects.
+      </div>
+    </div>
+
+    <!-- Map Canvas -->
+    <div id="map-container">
+      <div id="map"></div>
+    </div>
+
+    <!-- Right Panel -->
+    <div id="map-panel">
+      <!-- Default state -->
+      <div id="panel-default" class="panel-default">
+        <p class="label" style="margin-bottom:1.5rem;">Explore the City</p>
+        <h3 class="panel-default-title">Five neighborhoods.<br>Fifteen projects.</h3>
+        <p>Click any highlighted neighborhood on the map — or select one below — to see what teams built there.</p>
+        <div class="neighborhood-legend">
+          <div class="legend-item" data-neighborhood="south-bronx">
+            <div class="legend-swatch" style="background:#C8373A;"></div>
+            <span class="legend-name">South Bronx</span>
+            <span class="legend-borough">Bronx</span>
+          </div>
+          <div class="legend-item" data-neighborhood="red-hook">
+            <div class="legend-swatch" style="background:#1B4F8A;"></div>
+            <span class="legend-name">Red Hook</span>
+            <span class="legend-borough">Brooklyn</span>
+          </div>
+          <div class="legend-item" data-neighborhood="east-new-york">
+            <div class="legend-swatch" style="background:#1D6B45;"></div>
+            <span class="legend-name">East New York</span>
+            <span class="legend-borough">Brooklyn</span>
+          </div>
+          <div class="legend-item" data-neighborhood="flushing">
+            <div class="legend-swatch" style="background:#6B2D8B;"></div>
+            <span class="legend-name">Flushing</span>
+            <span class="legend-borough">Queens</span>
+          </div>
+          <div class="legend-item" data-neighborhood="staten-island-north">
+            <div class="legend-swatch" style="background:#C4611A;"></div>
+            <span class="legend-name">North Shore</span>
+            <span class="legend-borough">Staten Island</span>
+          </div>
+        </div>
+      </div>
+      <!-- Neighborhood panels injected by JS -->
+    </div>
+  </section>
+
+  <!-- ======== PROJECTS GRID ======== -->
+  <section id="projects-section">
+    <div class="section-header">
+      <h2>All Projects</h2>
+      <span class="section-count mono">15 total</span>
+    </div>
+
+    <div class="projects-filter-bar">
+      <button class="filter-btn active" data-filter="all">All Neighborhoods</button>
+      <button class="filter-btn" data-filter="winners">Winners Only</button>
+      <button class="filter-btn" data-filter="south-bronx">South Bronx</button>
+      <button class="filter-btn" data-filter="red-hook">Red Hook</button>
+      <button class="filter-btn" data-filter="east-new-york">East New York</button>
+      <button class="filter-btn" data-filter="flushing">Flushing</button>
+      <button class="filter-btn" data-filter="staten-island-north">North Shore, SI</button>
+    </div>
+
+    <div class="projects-grid" id="projects-grid">
+      <!-- Rendered by JS -->
+    </div>
+  </section>
+
+  <!-- ======== WINNERS SECTION ======== -->
+  <section id="winners-section">
+    <div class="section-header">
+      <h2>Winning Projects</h2>
+      <span class="section-count mono">4 selected</span>
+    </div>
+    <div class="winners-grid" id="winners-grid">
+      <!-- Rendered by JS -->
+    </div>
+  </section>
+
+  <!-- ======== ABOUT / METHODOLOGY ======== -->
+  <section id="about-section">
+    <div class="section-header">
+      <h2>About the Hackathon</h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-body">
+        <p>
+          LEAP — Learning, Equity, and Applied Practice — is a collaborative framework that brings together researchers, city agencies, community organizations, and data practitioners around shared urban challenges. The January 2026 hackathon focused on climate resilience: the capacity of New York's neighborhoods to withstand, adapt to, and recover from compounding climate stressors.
+        </p>
+        <p>
+          Over three days, fifteen teams worked across five neighborhoods — each selected for its distinctive climate risk profile and community context. Teams had access to JupyterHub computing environments pre-loaded with curated datasets, and were supported by mentors from city agencies, academic institutions, and the private sector.
+        </p>
+        <p>
+          The central thesis: that meaningful climate solutions emerge not from siloed expertise, but from genuine collaboration across disciplinary and community boundaries. The projects showcased here reflect what becomes possible when a data scientist works alongside a community organizer and an urban planner — each bringing irreplaceable knowledge to the table.
+        </p>
+        <p>
+          This website documents the methodology, the projects, and the data infrastructure that made the hackathon possible — so that future cohorts, partner cities, and the public can learn from and build on this work.
+        </p>
+      </div>
+      <div class="methodology-steps">
+        <div class="method-step">
+          <div class="step-num mono">01</div>
+          <div class="step-content">
+            <h4>Neighborhood Selection</h4>
+            <p>Five neighborhoods were selected to represent diverse climate risk profiles — coastal flooding, urban heat, stormwater, and compound exposures — across all five boroughs.</p>
+          </div>
+        </div>
+        <div class="method-step">
+          <div class="step-num mono">02</div>
+          <div class="step-content">
+            <h4>Team Formation</h4>
+            <p>Teams were intentionally cross-disciplinary, pairing technical practitioners with community experts. No team was composed entirely of data scientists.</p>
+          </div>
+        </div>
+        <div class="method-step">
+          <div class="step-num mono">03</div>
+          <div class="step-content">
+            <h4>Data Infrastructure</h4>
+            <p>JupyterHub environments pre-loaded with NYC Open Data, federal datasets, and neighborhood-specific layers gave every team a common starting point without requiring data wrangling from scratch.</p>
+          </div>
+        </div>
+        <div class="method-step">
+          <div class="step-num mono">04</div>
+          <div class="step-content">
+            <h4>Evaluation</h4>
+            <p>Projects were evaluated on methodological rigor, actionability for city agencies and community organizations, and quality of cross-disciplinary collaboration demonstrated in the work.</p>
+          </div>
+        </div>
+        <div class="method-step">
+          <div class="step-num mono">05</div>
+          <div class="step-content">
+            <h4>Ongoing Access</h4>
+            <p>Winning teams received continued JupyterHub access to develop their projects further. All project code and documentation is available in the shared repository.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== DATA & RESOURCES ======== -->
+  <section id="resources-section">
+    <div class="section-header">
+      <h2>Data &amp; Resources</h2>
+    </div>
+    <div class="resources-grid">
+      <div>
+        <p class="label" style="margin-bottom:1.25rem;">Datasets Used</p>
+        <div class="data-source-list">
+          <!-- Rendered from SITE_CONFIG or listed statically here -->
+          <a class="data-source-item" href="https://data.cityofnewyork.us/Environment/NYC-Stormwater-Flood-Maps/9i7c-xyvv/about_data" target="_blank" rel="noopener">
+            <span class="ds-name">NYC Stormwater Flood Maps (Cloudburst)</span>
+            <span class="ds-org">NYC Open Data</span>
+          </a>
+          <a class="data-source-item" href="https://github.com/NewYorkCityCouncil/heat_map" target="_blank" rel="noopener">
+            <span class="ds-name">NYC Heat Vulnerability Index &amp; Surface Temperature</span>
+            <span class="ds-org">NYC City Council</span>
+          </a>
+          <a class="data-source-item" href="https://data.cityofnewyork.us/Environment/Sea-Level-Rise-Maps-2050s-100-year-Floodplain-/hbw8-2bah" target="_blank" rel="noopener">
+            <span class="ds-name">Sea Level Rise Maps — 2050s 100-year Floodplain</span>
+            <span class="ds-org">NYC Open Data</span>
+          </a>
+          <a class="data-source-item" href="https://data.cityofnewyork.us/Environment/Sea-Level-Rise-Maps-2080s-100-year-Floodplain-/ek8y-fsqz/about_data" target="_blank" rel="noopener">
+            <span class="ds-name">Sea Level Rise Maps — 2080s 100-year Floodplain</span>
+            <span class="ds-org">NYC Open Data</span>
+          </a>
+          <a class="data-source-item" href="https://www.arcgis.com/apps/webappviewer/index.html?id=1c37d271fba14163bbb520517153d6d5" target="_blank" rel="noopener">
+            <span class="ds-name">PFIRM Flood Insurance Rate Maps</span>
+            <span class="ds-org">FEMA / NYC (via ArcGIS)</span>
+          </a>
+          <a class="data-source-item" href="https://data.cityofnewyork.us/Environment/2015-Street-Tree-Census-Tree-Data/uvpi-gqnh" target="_blank" rel="noopener">
+            <span class="ds-name">NYC Street Tree Census 2015</span>
+            <span class="ds-org">NYC Parks</span>
+          </a>
+        </div>
+      </div>
+      <div>
+        <p class="label" style="margin-bottom:1.25rem;">Partners &amp; Sponsors</p>
+        <div class="sponsors-grid">
+          <a class="sponsor-item" href="#" target="_blank">
+            <span>LEAP NYC</span>
+            <span class="sponsor-arrow">→</span>
+          </a>
+          <a class="sponsor-item" href="https://urbanomnibus.net" target="_blank" rel="noopener">
+            <span>Urban Omnibus</span>
+            <span class="sponsor-arrow">→</span>
+          </a>
+          <a class="sponsor-item" href="https://www.nyc.gov/site/planning" target="_blank" rel="noopener">
+            <span>NYC Department of City Planning</span>
+            <span class="sponsor-arrow">→</span>
+          </a>
+          <a class="sponsor-item" href="https://2i2c.org" target="_blank" rel="noopener">
+            <span>2i2c / JupyterHub</span>
+            <span class="sponsor-arrow">→</span>
+          </a>
+        </div>
+
+        <p class="label" style="margin-top:2.5rem;margin-bottom:1.25rem;">Map Precedents</p>
+        <div class="data-source-list">
+          <a class="data-source-item" href="https://urbanconservation.nybg.org/blue-zones#11.59/40.7554/-73.9427" target="_blank" rel="noopener">
+            <span class="ds-name">NYBG Urban Conservation Blue Zones</span>
+            <span class="ds-org">New York Botanical Garden</span>
+          </a>
+          <a class="data-source-item" href="https://capitalplanning.nyc.gov/capitalproject/846P-402HART" target="_blank" rel="noopener">
+            <span class="ds-name">NYC Capital Planning Explorer</span>
+            <span class="ds-org">NYC DCP</span>
+          </a>
+          <a class="data-source-item" href="https://www.nytimes.com/interactive/2023/upshot/extremely-detailed-nyc-neighborhood-map.html" target="_blank" rel="noopener">
+            <span class="ds-name">Extremely Detailed NYC Neighborhood Map</span>
+            <span class="ds-org">NYT The Upshot</span>
+          </a>
+          <a class="data-source-item" href="https://tree-map.nycgovparks.org/" target="_blank" rel="noopener">
+            <span class="ds-name">NYC Street Tree Map</span>
+            <span class="ds-org">NYC Parks</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== FOOTER ======== -->
+  <footer>
+    <span class="footer-brand">LEAP Hackathon 2026</span>
+    <span class="footer-meta mono">New York City · Climate Resilience · January 2026</span>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="data/content.js"></script>
+  <script src="js/main.js"></script>
+
+</body>
+</html>

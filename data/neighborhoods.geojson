@@ -1,0 +1,109 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "south-bronx",
+        "name": "South Bronx",
+        "borough": "Bronx"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [-73.9400, 40.7960],
+          [-73.9050, 40.7960],
+          [-73.8950, 40.8200],
+          [-73.9050, 40.8350],
+          [-73.9300, 40.8380],
+          [-73.9500, 40.8250],
+          [-73.9480, 40.8050],
+          [-73.9400, 40.7960]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "red-hook",
+        "name": "Red Hook",
+        "borough": "Brooklyn"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [-74.0200, 40.6700],
+          [-74.0050, 40.6700],
+          [-73.9970, 40.6780],
+          [-73.9990, 40.6850],
+          [-74.0090, 40.6870],
+          [-74.0200, 40.6820],
+          [-74.0230, 40.6750],
+          [-74.0200, 40.6700]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "east-new-york",
+        "name": "East New York",
+        "borough": "Brooklyn"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [-73.9050, 40.6500],
+          [-73.8600, 40.6500],
+          [-73.8500, 40.6600],
+          [-73.8550, 40.6850],
+          [-73.8850, 40.6900],
+          [-73.9100, 40.6800],
+          [-73.9100, 40.6600],
+          [-73.9050, 40.6500]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "flushing",
+        "name": "Flushing",
+        "borough": "Queens"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [-73.8550, 40.7550],
+          [-73.8150, 40.7550],
+          [-73.8100, 40.7750],
+          [-73.8300, 40.7850],
+          [-73.8600, 40.7800],
+          [-73.8650, 40.7650],
+          [-73.8550, 40.7550]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "staten-island-north",
+        "name": "North Shore, Staten Island",
+        "borough": "Staten Island"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [-74.1100, 40.6250],
+          [-74.0500, 40.6250],
+          [-74.0350, 40.6400],
+          [-74.0450, 40.6550],
+          [-74.0800, 40.6600],
+          [-74.1200, 40.6500],
+          [-74.1250, 40.6350],
+          [-74.1100, 40.6250]
+        ]]
+      }
+    }
+  ]
+}
