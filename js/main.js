@@ -1,67 +1,48 @@
 /* ============================================================
    LEAP Hackathon 2026 — Main JavaScript
    Map: Mapbox GL JS
-   Layers: Cloudburst (NYC Open Data), Heat (City Council),
-           Coastal Surge 2050s + 2080s (NYC Open Data)
+   Layers:
+     Cloudburst  — NYC DEP FeatureServer (ArcGIS, services2.arcgis.com)
+     Heat        — NYC City Council GeoTIFF via titiler.xyz COG tiles
+     PFIRM 2015  — NYC DCP ArcGIS MapServer tiles (tiles.arcgis.com)
+     Surge 2050  — NYC DCP ArcGIS MapServer tiles (Future_Floodplain_2050s)
+     Surge 2080  — NYC DCP ArcGIS MapServer tiles (Future_Floodplain_2080s)
    ============================================================ */
 
-// ---- Layer configurations ----
-// Each layer references a public NYC Open Data or similar tileset.
-// Replace tile URLs with actual hosted tiles once you have them processed.
-const LAYERS = {
-  neighborhoods: {
-    id: 'neighborhoods',
-    label: 'Neighborhoods',
-    color: 'multi',
-    visible: true,
-    source: 'local'
-  },
-  cloudburst: {
-    id: 'cloudburst',
-    label: 'Cloudburst Flooding',
-    color: '#5B8DD9',
-    visible: false,
-    // NYC Stormwater Flood Maps — shallow (nuisance) scenario
-    // Source: https://data.cityofnewyork.us/Environment/NYC-Stormwater-Flood-Maps/9i7c-xyvv
-    // TODO: Replace with processed vector tiles or hosted raster tiles
-    tileUrl: null, // Set to your tile URL e.g. 'https://tiles.example.com/cloudburst/{z}/{x}/{y}.pbf'
-    opacity: 0.55,
-    demo: true // Using a placeholder polygon for demo; remove when real tiles are ready
-  },
-  heat: {
-    id: 'heat',
-    label: 'Urban Heat (Surface Temp)',
-    color: '#E85D04',
-    visible: false,
-    // NYC Heat Vulnerability Index / Surface Temperature raster
-    // Source: https://github.com/NewYorkCityCouncil/heat_map
-    // TODO: Process the .tiff via gdal2tiles or host via GeoServer/titiler
-    tileUrl: null,
-    opacity: 0.55,
-    demo: true
-  },
-  surge2050: {
-    id: 'surge2050',
-    label: 'Coastal Surge (2050s)',
-    color: '#1B7FC4',
-    visible: false,
-    // Sea Level Rise Maps — 2050s 100-year Floodplain
-    // Source: https://data.cityofnewyork.us/Environment/Sea-Level-Rise-Maps-2050s-100-year-Floodplain-/hbw8-2bah
-    tileUrl: null,
-    opacity: 0.5,
-    demo: true
-  },
-  surge2080: {
-    id: 'surge2080',
-    label: 'Coastal Surge (2080s)',
-    color: '#0A3F6B',
-    visible: false,
-    // Sea Level Rise Maps — 2080s 100-year Floodplain
-    // Source: https://data.cityofnewyork.us/Environment/Sea-Level-Rise-Maps-2080s-100-year-Floodplain-/ek8y-fsqz
-    tileUrl: null,
-    opacity: 0.5,
-    demo: true
-  }
+// ArcGIS tile base for DCP flood layers (GfwWNkhOj9bNBqoJ org)
+const DCP_TILES = 'https://tiles.arcgis.com/tiles/GfwWNkhOj9bNBqoJ/arcgis/rest/services';
+
+// ArcGIS FeatureServer for cloudburst (NYC DEP stormwater extreme flood)
+const CLOUDBURST_QUERY =
+  'https://services2.arcgis.com/ZpsvDOsGv97WuKRh/ArcGIS/rest/services/' +
+  'NYC_Stormwater_Flood_Map___Extreme_Flood_gdb_%28new%29/FeatureServer/0/query' +
+  '?where=1%3D1&outFields=*&f=geojson&outSR=4326&resultRecordCount=2000';
+
+// titiler.xyz COG tile endpoint for NYC heat surface temp raster
+const HEAT_TIFF_URL = encodeURIComponent(
+  'https://raw.githubusercontent.com/NewYorkCityCouncil/heat_map/main/data/output/f_mean_temp.tif'
+);
+const HEAT_TILES =
+  `https://titiler.xyz/cog/tiles/{z}/{x}/{y}.png` +
+  `?url=${HEAT_TIFF_URL}&colormap_name=hot&rescale=25,55`;
+
+// ---- Source configs for each data overlay ----
+const OVERLAY_SOURCES = {
+  cloudburst: { kind: 'geojson', color: '#5B8DD9', opacity: 0.55 },
+  heat:       { kind: 'raster', tiles: [HEAT_TILES], tileSize: 256, opacity: 0.7,
+                attribution: 'Surface Temp 2020-22 — NYC City Council / titiler.xyz' },
+  pfirm:      { kind: 'raster',
+                tiles: [`${DCP_TILES}/2015PFIRMS/MapServer/tile/{z}/{y}/{x}`],
+                tileSize: 256, opacity: 0.75,
+                attribution: '2015 PFIRM Flood Zones — FEMA / NYC DCP' },
+  surge2050:  { kind: 'raster',
+                tiles: [`${DCP_TILES}/Future_Floodplain_2050s/MapServer/tile/{z}/{y}/{x}`],
+                tileSize: 256, opacity: 0.65,
+                attribution: 'Future Floodplain 2050s — NYC DCP' },
+  surge2080:  { kind: 'raster',
+                tiles: [`${DCP_TILES}/Future_Floodplain_2080s/MapServer/tile/{z}/{y}/{x}`],
+                tileSize: 256, opacity: 0.65,
+                attribution: 'Future Floodplain 2080s — NYC DCP' }
 };
 
 // Neighborhood color map (matches content.js)
@@ -73,51 +54,6 @@ const NHOOD_COLORS = {
   'staten-island-north': '#C4611A'
 };
 
-// ---- Demo overlay polygons ----
-// These approximate bounding boxes demonstrate layer behavior.
-// Replace with real tile sources when data is processed.
-const DEMO_OVERLAYS = {
-  cloudburst: {
-    type: 'FeatureCollection',
-    features: [
-      // South Bronx low-lying areas
-      { type: 'Feature', geometry: { type: 'Polygon', coordinates: [[[-73.934, 40.806], [-73.918, 40.806], [-73.912, 40.820], [-73.928, 40.828], [-73.942, 40.820], [-73.934, 40.806]]] }, properties: {} },
-      // Flushing creek corridor
-      { type: 'Feature', geometry: { type: 'Polygon', coordinates: [[[-73.848, 40.762], [-73.828, 40.762], [-73.820, 40.775], [-73.838, 40.782], [-73.852, 40.772], [-73.848, 40.762]]] }, properties: {} },
-      // Red Hook waterfront
-      { type: 'Feature', geometry: { type: 'Polygon', coordinates: [[[-74.018, 40.671], [-74.006, 40.671], [-74.000, 40.678], [-74.006, 40.685], [-74.018, 40.682], [-74.022, 40.675], [-74.018, 40.671]]] }, properties: {} }
-    ]
-  },
-  heat: {
-    type: 'FeatureCollection',
-    features: [
-      // East New York heat blob
-      { type: 'Feature', geometry: { type: 'Polygon', coordinates: [[[-73.904, 40.652], [-73.862, 40.652], [-73.851, 40.663], [-73.857, 40.688], [-73.884, 40.689], [-73.908, 40.678], [-73.908, 40.662], [-73.904, 40.652]]] }, properties: { intensity: 0.9 } },
-      // South Bronx heat
-      { type: 'Feature', geometry: { type: 'Polygon', coordinates: [[[-73.942, 40.798], [-73.907, 40.798], [-73.897, 40.822], [-73.907, 40.836], [-73.932, 40.838], [-73.950, 40.824], [-73.948, 40.807], [-73.942, 40.798]]] }, properties: { intensity: 0.8 } }
-    ]
-  },
-  surge2050: {
-    type: 'FeatureCollection',
-    features: [
-      // Red Hook expanded surge
-      { type: 'Feature', geometry: { type: 'Polygon', coordinates: [[[-74.023, 40.668], [-74.003, 40.668], [-73.996, 40.677], [-73.999, 40.688], [-74.012, 40.691], [-74.025, 40.684], [-74.028, 40.673], [-74.023, 40.668]]] }, properties: {} },
-      // Staten Island North Shore
-      { type: 'Feature', geometry: { type: 'Polygon', coordinates: [[[-74.118, 40.626], [-74.052, 40.626], [-74.037, 40.642], [-74.047, 40.658], [-74.082, 40.663], [-74.123, 40.653], [-74.128, 40.637], [-74.118, 40.626]]] }, properties: {} }
-    ]
-  },
-  surge2080: {
-    type: 'FeatureCollection',
-    features: [
-      // Red Hook + surrounding area (larger)
-      { type: 'Feature', geometry: { type: 'Polygon', coordinates: [[[-74.030, 40.665], [-73.998, 40.665], [-73.990, 40.677], [-73.994, 40.695], [-74.015, 40.699], [-74.032, 40.690], [-74.036, 40.674], [-74.030, 40.665]]] }, properties: {} },
-      // SI North Shore (larger)
-      { type: 'Feature', geometry: { type: 'Polygon', coordinates: [[[-74.126, 40.622], [-74.045, 40.622], [-74.028, 40.644], [-74.040, 40.664], [-74.080, 40.670], [-74.130, 40.658], [-74.136, 40.638], [-74.126, 40.622]]] }, properties: {} },
-      // Brooklyn waterfront
-      { type: 'Feature', geometry: { type: 'Polygon', coordinates: [[[-74.005, 40.670], [-73.985, 40.670], [-73.978, 40.680], [-73.990, 40.692], [-74.008, 40.688], [-74.012, 40.678], [-74.005, 40.670]]] }, properties: {} }
-    ]
-  }
-};
 
 // ---- Map initialization ----
 let map;
@@ -268,43 +204,60 @@ function addNeighborhoodLayer() {
   });
 }
 
+let cloudburstLoaded = false;
+
+async function loadCloudburstData() {
+  if (cloudburstLoaded) return;
+  try {
+    const res = await fetch(CLOUDBURST_QUERY);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const geojson = await res.json();
+    map.getSource('overlay-cloudburst').setData(geojson);
+    cloudburstLoaded = true;
+  } catch (err) {
+    console.warn('Cloudburst data fetch failed:', err);
+    showLayerNote('cloudburst-error',
+      'Could not load cloudburst layer. Check network or CORS access to the NYC DEP FeatureServer.');
+  }
+}
+
 function addOverlayLayers() {
-  // Add demo overlay sources and layers for each data layer
-  const layerConfig = [
-    { key: 'cloudburst', color: '#5B8DD9', opacity: 0.55 },
-    { key: 'heat', color: '#E85D04', opacity: 0.5 },
-    { key: 'surge2050', color: '#1B7FC4', opacity: 0.45 },
-    { key: 'surge2080', color: '#0A3F6B', opacity: 0.5 }
-  ];
-
-  layerConfig.forEach(({ key, color, opacity }) => {
-    map.addSource(`overlay-${key}`, {
-      type: 'geojson',
-      data: DEMO_OVERLAYS[key]
-    });
-
-    map.addLayer({
-      id: `overlay-${key}`,
-      type: 'fill',
-      source: `overlay-${key}`,
-      paint: {
-        'fill-color': color,
-        'fill-opacity': opacity
-      },
-      layout: { visibility: 'none' }
-    });
-
-    map.addLayer({
-      id: `overlay-${key}-line`,
-      type: 'line',
-      source: `overlay-${key}`,
-      paint: {
-        'line-color': color,
-        'line-width': 1,
-        'line-opacity': 0.8
-      },
-      layout: { visibility: 'none' }
-    });
+  Object.entries(OVERLAY_SOURCES).forEach(([key, cfg]) => {
+    if (cfg.kind === 'raster') {
+      map.addSource(`overlay-${key}`, {
+        type: 'raster',
+        tiles: cfg.tiles,
+        tileSize: cfg.tileSize,
+        attribution: cfg.attribution || ''
+      });
+      map.addLayer({
+        id: `overlay-${key}`,
+        type: 'raster',
+        source: `overlay-${key}`,
+        paint: { 'raster-opacity': cfg.opacity },
+        layout: { visibility: 'none' }
+      }, 'neighborhoods-line');
+    } else {
+      // GeoJSON vector layer (cloudburst) — data loaded lazily on first toggle
+      map.addSource(`overlay-${key}`, {
+        type: 'geojson',
+        data: { type: 'FeatureCollection', features: [] }
+      });
+      map.addLayer({
+        id: `overlay-${key}`,
+        type: 'fill',
+        source: `overlay-${key}`,
+        paint: { 'fill-color': cfg.color, 'fill-opacity': cfg.opacity },
+        layout: { visibility: 'none' }
+      }, 'neighborhoods-line');
+      map.addLayer({
+        id: `overlay-${key}-line`,
+        type: 'line',
+        source: `overlay-${key}`,
+        paint: { 'line-color': cfg.color, 'line-width': 1, 'line-opacity': 0.8 },
+        layout: { visibility: 'none' }
+      }, 'neighborhoods-line');
+    }
   });
 }
 
@@ -318,41 +271,42 @@ function setupLayerToggles() {
       if (layerId === 'neighborhoods') {
         ['neighborhoods-fill', 'neighborhoods-line', 'neighborhoods-label', 'neighborhoods-fill-hover']
           .forEach(id => map.setLayoutProperty(id, 'visibility', visibility));
-      } else {
-        [`overlay-${layerId}`, `overlay-${layerId}-line`]
-          .forEach(id => {
-            if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', visibility);
-          });
+        return;
+      }
 
-        // Show disclaimer if toggling a demo overlay
-        if (toggle.checked) {
-          showLayerDisclaimer(layerId);
-        }
+      if (map.getLayer(`overlay-${layerId}`)) {
+        map.setLayoutProperty(`overlay-${layerId}`, 'visibility', visibility);
+      }
+      // Vector layers also have a companion line layer
+      if (map.getLayer(`overlay-${layerId}-line`)) {
+        map.setLayoutProperty(`overlay-${layerId}-line`, 'visibility', visibility);
+      }
+
+      if (toggle.checked && layerId === 'cloudburst') {
+        loadCloudburstData();
+      }
+      if (toggle.checked && layerId === 'heat') {
+        showLayerNote('heat-source',
+          'Surface temp raster served via titiler.xyz from NYC City Council GeoTIFF. ' +
+          'If tiles are blank, the source file may not be a Cloud Optimized GeoTIFF — ' +
+          'convert with gdal_translate -of COG and re-host.');
       }
     });
   });
 }
 
-function showLayerDisclaimer(layerId) {
-  const labels = {
-    cloudburst: 'Cloudburst Flooding',
-    heat: 'Urban Heat Surface Temperature',
-    surge2050: 'Coastal Surge 2050s',
-    surge2080: 'Coastal Surge 2080s'
-  };
-  const existing = document.getElementById('layer-disclaimer');
-  if (existing) return;
-
+function showLayerNote(id, message) {
+  if (document.getElementById(`note-${id}`)) return;
   const el = document.createElement('div');
-  el.id = 'layer-disclaimer';
+  el.id = `note-${id}`;
   el.style.cssText = `
     position: absolute; bottom: 2.5rem; left: 1.25rem; z-index: 20;
     background: #0F1117; color: #F5F2EC; padding: 0.75rem 1rem;
-    font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem;
-    letter-spacing: 0.06em; max-width: 260px; line-height: 1.6;
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.62rem;
+    letter-spacing: 0.05em; max-width: 280px; line-height: 1.65;
     border-left: 2px solid #C4871A;
   `;
-  el.innerHTML = `⚠ Demo overlay — approximate extents shown.<br>Replace with processed tiles from NYC Open Data<br>when data pipeline is ready.<br><button onclick="this.parentElement.remove()" style="margin-top:0.5rem;background:none;border:1px solid rgba(245,242,236,0.3);color:#F5F2EC;padding:0.2rem 0.5rem;cursor:pointer;font-family:inherit;font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;">Dismiss</button>`;
+  el.innerHTML = `${message}<br><button onclick="this.parentElement.remove()" style="margin-top:0.5rem;background:none;border:1px solid rgba(245,242,236,0.3);color:#F5F2EC;padding:0.2rem 0.5rem;cursor:pointer;font-family:inherit;font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;">Dismiss</button>`;
   document.getElementById('map-container').appendChild(el);
 }
 
