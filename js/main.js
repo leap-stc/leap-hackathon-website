@@ -40,11 +40,11 @@ const OVERLAY_SOURCES = {
 
 // Neighborhood color map (matches content.js)
 const NHOOD_COLORS = {
-  'south-bronx': '#C8373A',
-  'red-hook': '#1B4F8A',
-  'east-new-york': '#1D6B45',
-  'flushing': '#6B2D8B',
-  'staten-island-north': '#C4611A'
+  'east-harlem': '#C8373A',
+  'soundview': '#1B5E8A',
+  'flushing': '#1D6B45',
+  'brownsville': '#6B2D8B',
+  'stapleton': '#C4611A'
 };
 
 
@@ -90,11 +90,11 @@ function addNeighborhoodLayer() {
     paint: {
       'fill-color': [
         'match', ['get', 'id'],
-        'south-bronx', '#C8373A',
-        'red-hook', '#1B4F8A',
-        'east-new-york', '#1D6B45',
-        'flushing', '#6B2D8B',
-        'staten-island-north', '#C4611A',
+        'east-harlem', '#C8373A',
+        'soundview', '#1B5E8A',
+        'flushing', '#1D6B45',
+        'brownsville', '#6B2D8B',
+        'stapleton', '#C4611A',
         '#888888'
       ],
       'fill-opacity': 0.15
@@ -109,11 +109,11 @@ function addNeighborhoodLayer() {
     paint: {
       'fill-color': [
         'match', ['get', 'id'],
-        'south-bronx', '#C8373A',
-        'red-hook', '#1B4F8A',
-        'east-new-york', '#1D6B45',
-        'flushing', '#6B2D8B',
-        'staten-island-north', '#C4611A',
+        'east-harlem', '#C8373A',
+        'soundview', '#1B5E8A',
+        'flushing', '#1D6B45',
+        'brownsville', '#6B2D8B',
+        'stapleton', '#C4611A',
         '#888888'
       ],
       'fill-opacity': [
@@ -133,11 +133,11 @@ function addNeighborhoodLayer() {
     paint: {
       'line-color': [
         'match', ['get', 'id'],
-        'south-bronx', '#C8373A',
-        'red-hook', '#1B4F8A',
-        'east-new-york', '#1D6B45',
-        'flushing', '#6B2D8B',
-        'staten-island-north', '#C4611A',
+        'east-harlem', '#C8373A',
+        'soundview', '#1B5E8A',
+        'flushing', '#1D6B45',
+        'brownsville', '#6B2D8B',
+        'stapleton', '#C4611A',
         '#888888'
       ],
       'line-width': [

@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LEAP Hackathon 2026 — Climate Resilience Through Collaborative Data Science</title>
-  <meta name="description" content="Showcasing 15 projects from 5 NYC neighborhoods exploring climate resilience through data science — from the LEAP Hackathon, January 2026.">
+  <meta name="description" content="Showcasing 14 projects from 5 NYC neighborhoods exploring climate resilience through data science — from the LEAP Hackathon, January 2026.">
   <meta property="og:title" content="LEAP Hackathon 2026">
-  <meta property="og:description" content="15 projects, 5 neighborhoods, 4 winners. NYC climate resilience through collaborative data science.">
+  <meta property="og:description" content="14 projects, 5 neighborhoods, 4 winners. NYC climate resilience through collaborative data science.">
   <meta property="og:type" content="website">
 
   <!-- Mapbox GL JS -->
@@ -46,7 +46,7 @@
       </p>
       <div class="hero-stats">
         <div class="stat-item">
-          <div class="stat-num">15</div>
+          <div class="stat-num">14</div>
           <div class="label">Projects</div>
         </div>
         <div class="stat-item">
@@ -63,25 +63,25 @@
       <div class="hero-visual-inner">
         <div class="hero-grid"></div>
         <div class="hero-borough-tags">
-          <div class="borough-tag" data-nhood="south-bronx">
-            <span>South Bronx</span>
-            <span class="mono" style="font-size:0.62rem; opacity:0.5;">40.81°N 73.92°W</span>
+          <div class="borough-tag highlighted" data-nhood="east-harlem">
+            <span>East Harlem, Manhattan</span>
+            <span class="mono" style="font-size:0.62rem; opacity:0.5;">40.80°N 73.94°W</span>
           </div>
-          <div class="borough-tag" data-nhood="red-hook">
-            <span>Red Hook, Brooklyn</span>
-            <span class="mono" style="font-size:0.62rem; opacity:0.5;">40.68°N 74.01°W</span>
-          </div>
-          <div class="borough-tag highlighted" data-nhood="east-new-york">
-            <span>East New York, Brooklyn</span>
-            <span class="mono" style="font-size:0.62rem; opacity:0.5;">40.67°N 73.88°W</span>
+          <div class="borough-tag" data-nhood="soundview">
+            <span>Soundview, Bronx</span>
+            <span class="mono" style="font-size:0.62rem; opacity:0.5;">40.82°N 73.87°W</span>
           </div>
           <div class="borough-tag" data-nhood="flushing">
             <span>Flushing, Queens</span>
             <span class="mono" style="font-size:0.62rem; opacity:0.5;">40.77°N 73.83°W</span>
           </div>
-          <div class="borough-tag" data-nhood="staten-island-north">
-            <span>North Shore, Staten Island</span>
-            <span class="mono" style="font-size:0.62rem; opacity:0.5;">40.63°N 74.09°W</span>
+          <div class="borough-tag" data-nhood="brownsville">
+            <span>Brownsville, Brooklyn</span>
+            <span class="mono" style="font-size:0.62rem; opacity:0.5;">40.66°N 73.91°W</span>
+          </div>
+          <div class="borough-tag" data-nhood="stapleton">
+            <span>Stapleton, Staten Island</span>
+            <span class="mono" style="font-size:0.62rem; opacity:0.5;">40.63°N 74.08°W</span>
           </div>
         </div>
       </div>
@@ -98,7 +98,7 @@
 
         <label class="layer-toggle">
           <input type="checkbox" data-layer="neighborhoods" checked>
-          <div class="layer-dot" style="background: linear-gradient(135deg, #C8373A 50%, #1B4F8A 50%);"></div>
+          <div class="layer-dot" style="background: linear-gradient(135deg, #C8373A 50%, #1B5E8A 50%);"></div>
           <span>Neighborhoods</span>
         </label>
 
@@ -148,32 +148,32 @@
       <!-- Default state -->
       <div id="panel-default" class="panel-default">
         <p class="label" style="margin-bottom:1.5rem;">Explore the City</p>
-        <h3 class="panel-default-title">Five neighborhoods.<br>Fifteen projects.</h3>
+        <h3 class="panel-default-title">Five neighborhoods.<br>Fourteen projects.</h3>
         <p>Click any highlighted neighborhood on the map — or select one below — to see what teams built there.</p>
         <div class="neighborhood-legend">
-          <div class="legend-item" data-neighborhood="south-bronx">
+          <div class="legend-item" data-neighborhood="east-harlem">
             <div class="legend-swatch" style="background:#C8373A;"></div>
-            <span class="legend-name">South Bronx</span>
+            <span class="legend-name">East Harlem</span>
+            <span class="legend-borough">Manhattan</span>
+          </div>
+          <div class="legend-item" data-neighborhood="soundview">
+            <div class="legend-swatch" style="background:#1B5E8A;"></div>
+            <span class="legend-name">Soundview</span>
             <span class="legend-borough">Bronx</span>
           </div>
-          <div class="legend-item" data-neighborhood="red-hook">
-            <div class="legend-swatch" style="background:#1B4F8A;"></div>
-            <span class="legend-name">Red Hook</span>
-            <span class="legend-borough">Brooklyn</span>
-          </div>
-          <div class="legend-item" data-neighborhood="east-new-york">
-            <div class="legend-swatch" style="background:#1D6B45;"></div>
-            <span class="legend-name">East New York</span>
-            <span class="legend-borough">Brooklyn</span>
-          </div>
           <div class="legend-item" data-neighborhood="flushing">
-            <div class="legend-swatch" style="background:#6B2D8B;"></div>
+            <div class="legend-swatch" style="background:#1D6B45;"></div>
             <span class="legend-name">Flushing</span>
             <span class="legend-borough">Queens</span>
           </div>
-          <div class="legend-item" data-neighborhood="staten-island-north">
+          <div class="legend-item" data-neighborhood="brownsville">
+            <div class="legend-swatch" style="background:#6B2D8B;"></div>
+            <span class="legend-name">Brownsville</span>
+            <span class="legend-borough">Brooklyn</span>
+          </div>
+          <div class="legend-item" data-neighborhood="stapleton">
             <div class="legend-swatch" style="background:#C4611A;"></div>
-            <span class="legend-name">North Shore</span>
+            <span class="legend-name">Stapleton</span>
             <span class="legend-borough">Staten Island</span>
           </div>
         </div>
@@ -186,17 +186,17 @@
   <section id="projects-section">
     <div class="section-header">
       <h2>All Projects</h2>
-      <span class="section-count mono">15 total</span>
+      <span class="section-count mono">14 total</span>
     </div>
 
     <div class="projects-filter-bar">
       <button class="filter-btn active" data-filter="all">All Neighborhoods</button>
       <button class="filter-btn" data-filter="winners">Winners Only</button>
-      <button class="filter-btn" data-filter="south-bronx">South Bronx</button>
-      <button class="filter-btn" data-filter="red-hook">Red Hook</button>
-      <button class="filter-btn" data-filter="east-new-york">East New York</button>
+      <button class="filter-btn" data-filter="east-harlem">East Harlem</button>
+      <button class="filter-btn" data-filter="soundview">Soundview</button>
       <button class="filter-btn" data-filter="flushing">Flushing</button>
-      <button class="filter-btn" data-filter="staten-island-north">North Shore, SI</button>
+      <button class="filter-btn" data-filter="brownsville">Brownsville</button>
+      <button class="filter-btn" data-filter="stapleton">Stapleton</button>
     </div>
 
     <div class="projects-grid" id="projects-grid">
@@ -226,7 +226,7 @@
           Learning the Earth with AI and Physics (LEAP) is a National Science Foundation - Science and Technology Center that brings together researchers, city agencies, community organizations, and data practitioners around shared urban challenges. The January 2026 hackathon focused on climate resilience: the capacity of New York's neighborhoods to withstand, adapt to, and recover from compounding climate stressors.
         </p>
         <p>
-          Over three days, fifteen teams worked across five neighborhoods — each selected for its distinctive climate risk profile and community context. Teams had access to JupyterHub computing environments pre-loaded with curated datasets, and were supported by mentors from city agencies, academic institutions, and the private sector.
+          Over three days, fourteen teams worked across five neighborhoods — each selected for its distinctive climate risk profile and community context. Teams had access to JupyterHub computing environments pre-loaded with curated datasets, and were supported by mentors from city agencies, academic institutions, and the private sector.
         </p>
         <p>
           The central thesis: that meaningful climate solutions emerge not from siloed expertise, but from genuine collaboration across disciplinary and community boundaries. The projects showcased here reflect what becomes possible when a data scientist works alongside a community organizer and an urban planner — each bringing irreplaceable knowledge to the table.
@@ -308,6 +308,14 @@
           <a class="data-source-item" href="https://data.cityofnewyork.us/Environment/2015-Street-Tree-Census-Tree-Data/uvpi-gqnh" target="_blank" rel="noopener">
             <span class="ds-name">NYC Street Tree Census 2015</span>
             <span class="ds-org">NYC Parks</span>
+          </a>
+          <a class="data-source-item" href="https://leap.columbia.edu" target="_blank" rel="noopener">
+            <span class="ds-name">CorrDiff Downscaled Climate Dataset</span>
+            <span class="ds-org">LEAP / NVIDIA</span>
+          </a>
+          <a class="data-source-item" href="https://www.floodnet.nyc" target="_blank" rel="noopener">
+            <span class="ds-name">FloodNet NYC Sensor Data</span>
+            <span class="ds-org">FloodNet NYC</span>
           </a>
         </div>
       </div>
