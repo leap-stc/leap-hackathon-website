@@ -1,0 +1,5 @@
+.DS_Store
+
+# Large raw GeoJSON files — use ArcGIS FeatureServer API or simplify before committing
+data/cloudburst_extreme_2080.geojson
+data/cloudburst_moderate_2050.geojson

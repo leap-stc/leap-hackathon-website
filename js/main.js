@@ -2,8 +2,8 @@
    LEAP Hackathon 2026 — Main JavaScript
    Map: Mapbox GL JS
    Layers:
-     Cloudburst  — NYC DEP FeatureServer (ArcGIS, services2.arcgis.com)
-     Heat        — NYC City Council GeoTIFF via titiler.xyz COG tiles
+     Cloudburst  — data/cloudburst_moderate_current.geojson (local, 5 MB)
+     Heat        — unavailable until COG hosted; set HEAT_COG_URL to enable
      PFIRM 2015  — NYC DCP ArcGIS MapServer tiles (tiles.arcgis.com)
      Surge 2050  — NYC DCP ArcGIS MapServer tiles (Future_Floodplain_2050s)
      Surge 2080  — NYC DCP ArcGIS MapServer tiles (Future_Floodplain_2080s)
@@ -12,25 +12,28 @@
 // ArcGIS tile base for DCP flood layers (GfwWNkhOj9bNBqoJ org)
 const DCP_TILES = 'https://tiles.arcgis.com/tiles/GfwWNkhOj9bNBqoJ/arcgis/rest/services';
 
-// ArcGIS FeatureServer for cloudburst (NYC DEP stormwater extreme flood)
-const CLOUDBURST_QUERY =
-  'https://services2.arcgis.com/ZpsvDOsGv97WuKRh/ArcGIS/rest/services/' +
-  'NYC_Stormwater_Flood_Map___Extreme_Flood_gdb_%28new%29/FeatureServer/0/query' +
-  '?where=1%3D1&outFields=*&f=geojson&outSR=4326&resultRecordCount=2000';
-
-// titiler.xyz COG tile endpoint for NYC heat surface temp raster
-const HEAT_TIFF_URL = encodeURIComponent(
-  'https://raw.githubusercontent.com/NewYorkCityCouncil/heat_map/main/data/output/f_mean_temp.tif'
-);
-const HEAT_TILES =
-  `https://titiler.xyz/cog/tiles/{z}/{x}/{y}.png` +
-  `?url=${HEAT_TIFF_URL}&colormap_name=hot&rescale=25,55`;
+// titiler.xyz COG tile endpoint for NYC heat surface temp raster.
+// Requires the source TIFF to be a Cloud Optimized GeoTIFF (COG) hosted
+// at a public URL. Update HEAT_COG_URL once you have a hosted COG.
+// Convert: gdal_translate -of COG -co COMPRESS=DEFLATE f_mean_temp.tif heat_cog.tif
+// Then upload to S3/GCS/Mapbox Studio and paste the public URL below.
+const HEAT_COG_URL = null; // e.g. 'https://your-bucket.s3.amazonaws.com/heat_cog.tif'
+const HEAT_TILES = HEAT_COG_URL
+  ? `https://titiler.xyz/cog/tiles/{z}/{x}/{y}.png?url=${encodeURIComponent(HEAT_COG_URL)}&colormap_name=hot&rescale=25,55`
+  : null;
 
 // ---- Source configs for each data overlay ----
 const OVERLAY_SOURCES = {
-  cloudburst: { kind: 'geojson', color: '#5B8DD9', opacity: 0.55 },
-  heat:       { kind: 'raster', tiles: [HEAT_TILES], tileSize: 256, opacity: 0.7,
-                attribution: 'Surface Temp 2020-22 — NYC City Council / titiler.xyz' },
+  cloudburst: {
+    kind: 'geojson',
+    url: 'data/cloudburst_moderate_current.geojson',
+    color: '#5B8DD9',
+    opacity: 0.55
+  },
+  heat: HEAT_TILES
+    ? { kind: 'raster', tiles: [HEAT_TILES], tileSize: 256, opacity: 0.7,
+        attribution: 'Surface Temp 2020-22 — NYC City Council / titiler.xyz' }
+    : { kind: 'unavailable' },
   pfirm:      { kind: 'raster',
                 tiles: [`${DCP_TILES}/2015PFIRMS/MapServer/tile/{z}/{y}/{x}`],
                 tileSize: 256, opacity: 0.75,
@@ -204,25 +207,10 @@ function addNeighborhoodLayer() {
   });
 }
 
-let cloudburstLoaded = false;
-
-async function loadCloudburstData() {
-  if (cloudburstLoaded) return;
-  try {
-    const res = await fetch(CLOUDBURST_QUERY);
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const geojson = await res.json();
-    map.getSource('overlay-cloudburst').setData(geojson);
-    cloudburstLoaded = true;
-  } catch (err) {
-    console.warn('Cloudburst data fetch failed:', err);
-    showLayerNote('cloudburst-error',
-      'Could not load cloudburst layer. Check network or CORS access to the NYC DEP FeatureServer.');
-  }
-}
-
 function addOverlayLayers() {
   Object.entries(OVERLAY_SOURCES).forEach(([key, cfg]) => {
+    if (cfg.kind === 'unavailable') return; // skip until data is ready
+
     if (cfg.kind === 'raster') {
       map.addSource(`overlay-${key}`, {
         type: 'raster',
@@ -238,10 +226,9 @@ function addOverlayLayers() {
         layout: { visibility: 'none' }
       }, 'neighborhoods-line');
     } else {
-      // GeoJSON vector layer (cloudburst) — data loaded lazily on first toggle
       map.addSource(`overlay-${key}`, {
         type: 'geojson',
-        data: { type: 'FeatureCollection', features: [] }
+        data: cfg.url
       });
       map.addLayer({
         id: `overlay-${key}`,
@@ -282,14 +269,11 @@ function setupLayerToggles() {
         map.setLayoutProperty(`overlay-${layerId}-line`, 'visibility', visibility);
       }
 
-      if (toggle.checked && layerId === 'cloudburst') {
-        loadCloudburstData();
-      }
-      if (toggle.checked && layerId === 'heat') {
-        showLayerNote('heat-source',
-          'Surface temp raster served via titiler.xyz from NYC City Council GeoTIFF. ' +
-          'If tiles are blank, the source file may not be a Cloud Optimized GeoTIFF — ' +
-          'convert with gdal_translate -of COG and re-host.');
+      if (toggle.checked && layerId === 'heat' && OVERLAY_SOURCES.heat.kind === 'unavailable') {
+        toggle.checked = false;
+        showLayerNote('heat-unavailable',
+          'Heat layer not yet configured. Convert the source TIFF to a COG ' +
+          '(gdal_translate -of COG), host it publicly, then set HEAT_COG_URL in main.js.');
       }
     });
   });
