@@ -12,15 +12,6 @@
 // ArcGIS tile base for DCP flood layers (GfwWNkhOj9bNBqoJ org)
 const DCP_TILES = 'https://tiles.arcgis.com/tiles/GfwWNkhOj9bNBqoJ/arcgis/rest/services';
 
-// titiler.xyz COG tile endpoint for NYC heat surface temp raster.
-// Requires the source TIFF to be a Cloud Optimized GeoTIFF (COG) hosted
-// at a public URL. Update HEAT_COG_URL once you have a hosted COG.
-// Convert: gdal_translate -of COG -co COMPRESS=DEFLATE f_mean_temp.tif heat_cog.tif
-// Then upload to S3/GCS/Mapbox Studio and paste the public URL below.
-const HEAT_COG_URL = null; // e.g. 'https://your-bucket.s3.amazonaws.com/heat_cog.tif'
-const HEAT_TILES = HEAT_COG_URL
-  ? `https://titiler.xyz/cog/tiles/{z}/{x}/{y}.png?url=${encodeURIComponent(HEAT_COG_URL)}&colormap_name=hot&rescale=25,55`
-  : null;
 
 // ---- Source configs for each data overlay ----
 const OVERLAY_SOURCES = {
@@ -30,10 +21,9 @@ const OVERLAY_SOURCES = {
     color: '#5B8DD9',
     opacity: 0.55
   },
-  heat: HEAT_TILES
-    ? { kind: 'raster', tiles: [HEAT_TILES], tileSize: 256, opacity: 0.7,
-        attribution: 'Surface Temp 2020-22 — NYC City Council / titiler.xyz' }
-    : { kind: 'unavailable' },
+  heat: { kind: 'raster', tiles: ['data/tiles/heat/{z}/{x}/{y}.png'],
+           tileSize: 256, opacity: 0.7,
+           attribution: 'Mean Surface Temp 2020-22 — NYC City Council' },
   pfirm:      { kind: 'raster',
                 tiles: [`${DCP_TILES}/2015PFIRMS/MapServer/tile/{z}/{y}/{x}`],
                 tileSize: 256, opacity: 0.75,
@@ -269,12 +259,6 @@ function setupLayerToggles() {
         map.setLayoutProperty(`overlay-${layerId}-line`, 'visibility', visibility);
       }
 
-      if (toggle.checked && layerId === 'heat' && OVERLAY_SOURCES.heat.kind === 'unavailable') {
-        toggle.checked = false;
-        showLayerNote('heat-unavailable',
-          'Heat layer not yet configured. Convert the source TIFF to a COG ' +
-          '(gdal_translate -of COG), host it publicly, then set HEAT_COG_URL in main.js.');
-      }
     });
   });
 }
