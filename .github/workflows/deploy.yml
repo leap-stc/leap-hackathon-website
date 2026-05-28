@@ -24,6 +24,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Inject Mapbox token
+        run: echo "const MAPBOX_TOKEN = '${{ secrets.MAPBOX_TOKEN }}';" > data/config.js
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
