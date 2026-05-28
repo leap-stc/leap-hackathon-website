@@ -1,219 +1,245 @@
 const NEIGHBORHOODS = [
   {
-    id: "south-bronx",
-    name: "South Bronx",
-    borough: "Bronx",
-    description: "A historically underserved community facing compounding climate risks from extreme heat, stormwater flooding, and proximity to industrial waterfront corridors. Teams here examined how green infrastructure could be equitably distributed across census tracts with the highest vulnerability indices.",
+    id: "east-harlem",
+    name: "East Harlem",
+    borough: "Manhattan",
+    description: "East Harlem faces compounding climate risks from extreme heat and flooding, exacerbated by limited green spaces and significant socioeconomic vulnerability. Teams here examined cooling accessibility, green infrastructure gaps, and sanitation's role in flood resilience.",
     pullQuote: "The data told a story we already knew — now we have the tools to prove it.",
-    coordinates: [-73.9196, 40.8136],
-    color: "#E63946",
-    projects: ["bronx-heat-equity", "bronx-flood-corridors", "bronx-green-infra"]
+    coordinates: [-73.9380, 40.7957],
+    color: "#C8373A",
+    projects: ["african-elephants", "alaskan-brown-bears", "blue-whales"]
   },
   {
-    id: "red-hook",
-    name: "Red Hook",
-    borough: "Brooklyn",
-    description: "A waterfront neighborhood that experienced severe flooding during Hurricane Sandy, Red Hook remains one of NYC's most flood-exposed communities. Teams investigated coastal surge projections under 2050 and 2080 scenarios alongside existing community resilience assets.",
-    pullQuote: "Sandy showed us what's coming. This hackathon gave us a framework to respond.",
-    coordinates: [-74.0099, 40.6758],
-    color: "#457B9D",
-    projects: ["red-hook-surge", "red-hook-assets", "red-hook-community"]
-  },
-  {
-    id: "east-new-york",
-    name: "East New York",
-    borough: "Brooklyn",
-    description: "One of the city's hottest neighborhoods in summer months, East New York sits at the intersection of the urban heat island effect and socioeconomic vulnerability. Teams mapped cooling center access gaps and proposed data-driven interventions for extreme heat events.",
-    pullQuote: "When you layer heat, income, and age — the picture becomes impossible to ignore.",
-    coordinates: [-73.8769, 40.6661],
-    color: "#2D6A4F",
-    projects: ["eny-heat-island", "eny-cooling-access", "eny-tree-canopy"]
+    id: "soundview",
+    name: "Soundview",
+    borough: "Bronx",
+    description: "Soundview contends with stormwater flooding and gaps in green infrastructure that leave residents vulnerable during cloudbursts. Teams modeled pluvial floods and assessed heat vulnerability among aging residents, identifying sites for targeted intervention.",
+    pullQuote: "The creek doesn't know borough boundaries — and neither should our solutions.",
+    coordinates: [-73.8730, 40.8170],
+    color: "#1B5E8A",
+    projects: ["giant-canoes", "giant-sequoias"]
   },
   {
     id: "flushing",
-    name: "Flushing",
+    name: "Flushing / Queens",
     borough: "Queens",
-    description: "Flushing faces a unique confluence of stormwater flooding from the Flushing Creek watershed and an increasingly dense built environment. Teams analyzed cloudburst mapping data to identify priority infrastructure investments and community preparedness strategies.",
-    pullQuote: "The creek doesn't know borough boundaries — and neither should our solutions.",
+    description: "Flushing Bay and the surrounding Queens neighborhoods face intense stormwater flooding from cloudbursts and limited sewer capacity. Teams developed AI-powered visualization tools, rain garden models, and stormwater capture frameworks to address compounding flood risk.",
+    pullQuote: "Increasing precipitation and more intense cloudbursts demand smarter, community-driven solutions.",
     coordinates: [-73.8330, 40.7675],
-    color: "#7B2D8B",
-    projects: ["flushing-cloudburst", "flushing-watershed", "flushing-prep"]
+    color: "#1D6B45",
+    projects: ["gorillas", "hadrosaur-footprints", "king-penguins"]
   },
   {
-    id: "staten-island-north",
-    name: "North Shore, Staten Island",
+    id: "brownsville",
+    name: "Brownsville",
+    borough: "Brooklyn",
+    description: "Brownsville sits at the intersection of extreme heat vulnerability and limited access to cooling resources. Teams developed spatial optimization tools for cooling site placement and a climate-aware emergency routing system to improve resilience for this historically underserved community.",
+    pullQuote: "When you layer heat, income, and access — the picture becomes impossible to ignore.",
+    coordinates: [-73.9124, 40.6635],
+    color: "#6B2D8B",
+    projects: ["komodo-dragons", "megalodons", "moai-statues"]
+  },
+  {
+    id: "stapleton",
+    name: "Stapleton",
     borough: "Staten Island",
-    description: "The North Shore of Staten Island combines industrial legacy, waterfront flooding exposure, and limited transit connectivity. Teams here focused on compound risk scenarios and the role of community land trusts in building long-term climate resilience.",
+    description: "Stapleton on Staten Island's North Shore faces persistent flooding driven by topography, aging infrastructure, and rising seas. Teams developed tree-planting simulation tools, improved flood modeling, and community-facing alert systems to build long-term resilience.",
     pullQuote: "Resilience isn't just about surviving the storm — it's about who gets to stay after.",
-    coordinates: [-74.0776, 40.6412],
-    color: "#E9762B",
-    projects: ["si-compound-risk", "si-land-trust", "si-shoreline"]
+    coordinates: [-74.0776, 40.6280],
+    color: "#C4611A",
+    projects: ["sperm-whales", "stars-of-india", "titanosaurs"]
   }
 ];
 
 const PROJECTS = [
-  // South Bronx
+  // East Harlem
   {
-    id: "bronx-heat-equity",
-    neighborhoodId: "south-bronx",
-    title: "Thermal Equity Index",
-    team: "Team Albedo",
-    description: "A composite vulnerability index that layers surface temperature data, tree canopy cover, and demographic indicators to identify the highest-priority census tracts for cooling interventions in the South Bronx.",
+    id: "african-elephants",
+    neighborhoodId: "east-harlem",
+    title: "Risk to Response: Rethinking Heat Resilience in East Harlem",
+    team: "African Elephants",
+    members: "Claire Helms, Eve Lu, Nami Jain, Glen Chua, Tamara Jeffries",
+    description: "Developed a cooling accessibility score integrating multiple datasets to identify areas with poor access to cooling centers. Proposed using local assets like schools and businesses as supplemental cooling sites, alongside an asset-based communication program involving high schoolers and community organizations to improve heat preparedness year-round.",
+    isWinner: false,
+    tags: ["heat", "cooling-access", "equity", "community"],
+    demoAvailable: false,
+    datasets: ["CorrDiff downscaled dataset", "NYC We Cool", "MTA GTFS transit data", "OpenStreetMap", "2020 U.S. Census", "NYC Subway Routes"]
+  },
+  {
+    id: "alaskan-brown-bears",
+    neighborhoodId: "east-harlem",
+    title: "",
+    team: "Alaskan Brown Bears",
+    members: "Alana Menendez, Andre Nguyen, Brooke Walker-Concepcion, Jose Solorzano Escobar, Rania Khan",
+    description: "Developed EcoMaps, an interactive tool for young community members to visualize green space benefits and a hyperlocal tree census database to secure maintenance funding. The Jupyter notebook tool enables ecological trend analysis and visualization of tree care benefits, designed for engagement at public schools and community events.",
+    isWinner: false,
+    tags: ["green-infrastructure", "urban-forestry", "community", "youth"],
+    demoAvailable: true,
+    datasets: ["Heat Vulnerability Index", "Forestry tree points dataset", "Street Tree Eco-benefit", "NYC Council mean heat deviation"]
+  },
+  {
+    id: "blue-whales",
+    neighborhoodId: "east-harlem",
+    title: "",
+    team: "Blue Whales",
+    members: "Archy Guo, Charlotte Rhoads, Pooja Thakur, Raheem Williams, Tracy Obirika",
+    description: "Investigated how East Harlem's history as a salt marsh and ongoing sanitation neglect exacerbate flooding. Geospatial analysis revealed an uneven distribution of trash cans compared to wealthier neighborhoods, identifying high-risk areas where inadequate sanitation infrastructure directly contributes to clogged drains and intensified flood risk.",
     isWinner: true,
-    winnerRank: 1,
-    evalQuote: "Exceptional methodological rigor combined with actionable policy recommendations. The index is immediately usable by city agencies.",
-    tags: ["heat", "equity", "index"],
-    demoAvailable: true
-  },
-  {
-    id: "bronx-flood-corridors",
-    neighborhoodId: "south-bronx",
-    title: "Stormwater Flow Corridors",
-    team: "Team Confluence",
-    description: "Mapping the hidden drainage pathways through the South Bronx street grid to predict where cloudburst flooding concentrates and which corridors could be retrofitted as green streets.",
-    isWinner: false,
-    tags: ["stormwater", "green-infrastructure", "mapping"],
-    demoAvailable: false
-  },
-  {
-    id: "bronx-green-infra",
-    neighborhoodId: "south-bronx",
-    title: "Green Infrastructure Gap Analysis",
-    team: "Team Root System",
-    description: "An audit of existing DEP green infrastructure installations versus modeled need, identifying neighborhoods where investment has lagged behind vulnerability exposure.",
-    isWinner: false,
-    tags: ["green-infrastructure", "policy", "data"],
-    demoAvailable: true
-  },
-  // Red Hook
-  {
-    id: "red-hook-surge",
-    neighborhoodId: "red-hook",
-    title: "2050 Surge Scenario Planner",
-    team: "Team Tidemark",
-    description: "An interactive scenario tool comparing 2050s and 2080s 100-year floodplain projections with current land use to quantify assets at risk and prioritize protection strategies.",
-    isWinner: true,
-    winnerRank: 2,
-    evalQuote: "The scenario comparison interface is intuitive and the underlying data methodology is sound. A strong foundation for community engagement.",
-    tags: ["coastal-flooding", "sea-level-rise", "scenario-planning"],
-    demoAvailable: true
-  },
-  {
-    id: "red-hook-assets",
-    neighborhoodId: "red-hook",
-    title: "Community Asset Resilience Map",
-    team: "Team Anchor",
-    description: "A participatory mapping project cataloguing Red Hook's social infrastructure — community organizations, food access points, informal support networks — and their flood vulnerability.",
-    isWinner: false,
-    tags: ["community-assets", "participatory", "social-infrastructure"],
-    demoAvailable: false
-  },
-  {
-    id: "red-hook-community",
-    neighborhoodId: "red-hook",
-    title: "Recovery Time Estimator",
-    team: "Team Watermark",
-    description: "Using Sandy recovery data as a baseline, this model estimates post-flood recovery timelines for different surge scenarios and household income levels in Red Hook.",
-    isWinner: false,
-    tags: ["recovery", "equity", "modeling"],
-    demoAvailable: false
-  },
-  // East New York
-  {
-    id: "eny-heat-island",
-    neighborhoodId: "east-new-york",
-    title: "Urban Heat Island Dynamics",
-    team: "Team Thermal",
-    description: "A time-series analysis of Landsat surface temperature data over East New York from 2000–2024, correlating heat island intensification with development patterns and tree canopy loss.",
-    isWinner: true,
+    isWinnerCategory: "Best Incorporation of Risk Assessment + Projection",
     winnerRank: 3,
-    evalQuote: "Sophisticated temporal analysis that clearly demonstrates the relationship between development decisions and heat vulnerability. Compelling visualizations.",
-    tags: ["heat", "remote-sensing", "time-series"],
-    demoAvailable: true
+    evalQuote: "Strong integration of multiple datasets demonstrating the clear link between sanitation infrastructure and flood resilience.",
+    tags: ["flooding", "sanitation", "equity", "geospatial"],
+    demoAvailable: false,
+    datasets: ["311 service requests", "NYCDEP catch basins", "DSNY litter basket locations", "NYC stormwater flood maps"]
   },
+
+  // Soundview
   {
-    id: "eny-cooling-access",
-    neighborhoodId: "east-new-york",
-    title: "Cooling Center Accessibility",
-    team: "Team Refuge",
-    description: "Network analysis of pedestrian travel times to cooling centers during extreme heat events, accounting for age, mobility, and transit access across East New York.",
+    id: "giant-canoes",
+    neighborhoodId: "soundview",
+    title: "",
+    team: "Giant Canoes",
+    members: "Archy Guo, Charlotte Rhoads, Pooja Thakur, Raheem Williams, Tracy Obirika",
+    description: "Modeled pluvial floods in Soundview using digital elevation models and Sphinx open-source software to identify optimal sites for green infrastructure like rain gardens and bioswales. Developed an interactive map visualizing how converting underutilized areas such as parking lots could improve permeability and reduce flood risk.",
     isWinner: false,
-    tags: ["cooling-centers", "accessibility", "network-analysis"],
-    demoAvailable: false
+    tags: ["stormwater", "green-infrastructure", "flood-modeling", "mapping"],
+    demoAvailable: true,
+    datasets: ["NYC Digital Elevation Model", "ESA WorldCover 2021", "HRRR precipitation data", "USGS discharge data"]
   },
   {
-    id: "eny-tree-canopy",
-    neighborhoodId: "east-new-york",
-    title: "Tree Canopy Expansion Model",
-    team: "Team Canopy",
-    description: "Identifying optimal planting sites for maximum cooling impact in East New York using a multi-criteria spatial analysis of impervious surface, soil quality, and pedestrian exposure.",
+    id: "giant-sequoias",
+    neighborhoodId: "soundview",
+    title: "",
+    team: "Giant Sequoias",
+    members: "Arya Roi, Caroline Shaum, Kevin Chan, Laura Lovelace, Zoe Tseng",
+    description: "Assessed heat vulnerability in Soundview focusing on residents over 65 using Google Earth Engine surface temperature data and CESM2 climate projections for 2030 and 2035. Identified 49 brownfield sites as potential redevelopment locations for cooling interventions.",
     isWinner: false,
-    tags: ["urban-forestry", "heat", "spatial-analysis"],
-    demoAvailable: false
+    tags: ["heat", "aging-populations", "remote-sensing", "brownfields"],
+    demoAvailable: false,
+    datasets: ["Google Earth Engine surface temperature", "CESM2 Earth System Model (SSP2-4.5)", "Brownfield site reports", "GIS / EJNYC"]
   },
-  // Flushing
+
+  // Flushing / Queens
   {
-    id: "flushing-cloudburst",
+    id: "gorillas",
     neighborhoodId: "flushing",
-    title: "Cloudburst Priority Map",
-    team: "Team Deluge",
-    description: "Integrating NYC's stormwater flood maps with real-time rainfall data to produce a dynamic cloudburst risk surface for Flushing, with recommendations for cloudburst management infrastructure.",
+    title: "",
+    team: "Gorillas",
+    members: "Khushi Mehta, Tehreem Qureshi, Bayonle Ibukun, Ariann Duncan, Steven Smith",
+    description: "Developed Cloudburst AI, an interactive 3D visualization platform and AI agent addressing frequent flooding in Queens. The tool uses an open-source ALAMA model with climate specialist, scientific validator, and community planner roles to communicate flood relief potential and integrate expert feedback from the Guardians of Flushing Bay.",
+    isWinner: false,
+    tags: ["cloudburst", "AI", "3D-visualization", "community"],
+    demoAvailable: true,
+    datasets: ["CorrDiff downscaled climate dataset", "NYC Planimetric Database", "Queens weather data 1895–2025", "NYC Flood Vulnerability Index", "NYC311 flooding complaints"]
+  },
+  {
+    id: "hadrosaur-footprints",
+    neighborhoodId: "flushing",
+    title: "Rain Garden Decision Support Tool",
+    team: "Hadrosaur Footprints",
+    members: "Aayush Parekh, Connor Feldman, Gianluca Astudillo, Lea Coquet, Shreeya KC",
+    description: "Modeled the impact of rain gardens on stormwater runoff in Flushing Bay to improve flood resilience and reduce combined sewer overflow. The model integrates physical neighborhood characteristics, sewer system data, and rainfall time series to evaluate the effectiveness of existing and optimized rain garden designs.",
+    isWinner: false,
+    tags: ["rain-gardens", "stormwater", "CSO", "modeling"],
+    demoAvailable: true,
+    datasets: ["NYC rain garden locations", "Flushing physical characteristics", "NYC Planning sewer data", "FloodNet NYC rainfall data", "EPA SWMM parameters"]
+  },
+  {
+    id: "king-penguins",
+    neighborhoodId: "flushing",
+    title: "",
+    team: "King Penguins",
+    members: "Audrey Jenkins, Gregory Randazzo, Sunni Hu, Tyler Janoski, Xinchi Zhang",
+    description: "Developed a model to estimate stormwater capture and infiltration from rain gardens based on rainfall rate, soil infiltration, slope, and drainage area. Focused on reducing combined sewer overflow in the Flushing Bay area to improve water quality and mitigate flooding risk in urban environments.",
+    isWinner: false,
+    tags: ["rain-gardens", "stormwater", "CSO", "infiltration"],
+    demoAvailable: false,
+    datasets: ["Combined Sewer Overflow data", "Forestry Tree Points", "Forestry Planting Spaces", "Mean slope data", "USDA SSURGO soil data"]
+  },
+
+  // Brownsville
+  {
+    id: "komodo-dragons",
+    neighborhoodId: "brownsville",
+    title: "",
+    team: "Komodo Dragons",
+    members: "Karla Pinzón, Jorge Bravo, Cathy Deng, Forrest Pan",
+    description: "Addressed extreme heat vulnerability in Brownsville by improving access to cooling resources through optimized placement of fire hydrant spray caps. Developed an interactive web map applying spatial optimization algorithms (K-center problem using greedy methods and K-d trees) to minimize the distance residents must travel to reach cooling sources during heat waves.",
     isWinner: true,
+    isWinnerCategory: "Best Built Environment Proposal",
+    winnerRank: 5,
+    evalQuote: "Innovative application of spatial optimization to a concrete, implementable intervention for heat resilience.",
+    tags: ["heat", "cooling", "spatial-optimization", "equity"],
+    demoAvailable: false,
+    datasets: ["NYC Hydrant Map", "Cool It! NYC 2020 Cooling Sites", "NYC Parks Drinking Fountains", "ERA5 and CorrDiff", "Boundaries NYC"]
+  },
+  {
+    id: "megalodons",
+    neighborhoodId: "brownsville",
+    title: "OUR-ERA (Open Urban Resilience – Emergency Routing Assistant)",
+    team: "Megalodons",
+    members: "Aarnav Hariramani, Adam Rahman, Sunima Dangol, William Manriquez, Xinyu Yan",
+    description: "Developed OUR-ERA, a climate-aware georouting tool designed to improve emergency response and resource accessibility in Brownsville. The system integrates climate risk indicators including flooding, heat vulnerability, air quality, and terrain slope into a dynamic routing model to support safer navigation and more efficient emergency service planning.",
+    isWinner: true,
+    isWinnerCategory: "Best Community Communication Tool",
     winnerRank: 4,
-    evalQuote: "Strong integration of multiple datasets with clear utility for the Department of Environmental Protection's cloudburst planning program.",
-    tags: ["cloudburst", "stormwater", "dynamic-mapping"],
-    demoAvailable: true
+    evalQuote: "A sophisticated and immediately useful tool that meaningfully integrates climate risk into emergency routing for an underserved community.",
+    tags: ["emergency-routing", "climate-risk", "accessibility", "georouting"],
+    demoAvailable: true,
+    datasets: ["NYC Stormwater Flood Map", "Street Tree Census", "NYCCAS Air Survey", "Heat Vulnerability Index", "OpenStreetMap / OSMnx", "Open-Elevation API"]
   },
   {
-    id: "flushing-watershed",
-    neighborhoodId: "flushing",
-    title: "Creek Watershed Restoration",
-    team: "Team Watershed",
-    description: "A restoration opportunity analysis for the Flushing Creek watershed, identifying parcels where daylighting or green infrastructure could reduce peak stormwater flows.",
+    id: "moai-statues",
+    neighborhoodId: "brownsville",
+    title: "CLIM-ALIGN",
+    team: "Moai Statues",
+    members: "Kelsey Wang, Yolanda Trujia Adria, George Milly",
+    description: "Developed CLIM-ALIGN, a climate retrofit analysis tool assessing heat vulnerability in NYCHA public housing developments and supporting decision-making for building retrofits in response to rising temperatures and aging infrastructure.",
+    isWinner: true,
+    isWinnerCategory: "Best Visualization of Data & Best Overall Project",
+    winnerRank: 1,
+    evalQuote: "Exceptional visualization and a directly actionable framework for NYCHA retrofit prioritization. A standout project on every dimension.",
+    tags: ["NYCHA", "heat", "retrofit", "public-housing"],
+    demoAvailable: true,
+    datasets: ["ERA5 Reanalysis Data", "NYC 311 heat and water complaints", "NYU Furman Center HVI data", "NYCHA housing data"]
+  },
+
+  // Stapleton
+  {
+    id: "sperm-whales",
+    neighborhoodId: "stapleton",
+    title: "",
+    team: "Sperm Whales",
+    members: "Chaitanya Kukreja, Julia Barcelo Figueras, Kai Xu",
+    description: "Developed an interactive platform to identify heat vulnerability at a hyper-local street level in Staten Island and simulate how targeted tree-planting could reduce neighborhood temperatures. The tool combines environmental and socioeconomic data to help communities and planners visualize where cooling interventions would have the greatest equity impact.",
     isWinner: false,
-    tags: ["watershed", "restoration", "stormwater"],
-    demoAvailable: false
+    tags: ["heat", "urban-forestry", "equity", "simulation"],
+    demoAvailable: true,
+    datasets: ["NASA Landsat 8 surface temperature", "WorldPop & ACS demographic data", "NYC Street Tree Census 2015"]
   },
   {
-    id: "flushing-prep",
-    neighborhoodId: "flushing",
-    title: "Community Preparedness Index",
-    team: "Team Ready",
-    description: "Surveying existing emergency preparedness resources and social capital in Flushing to build a neighborhood-level resilience score that can track progress over time.",
+    id: "stars-of-india",
+    neighborhoodId: "stapleton",
+    title: "Revitalizing a Community Landmark to Address Flooding",
+    team: "Stars of India",
+    members: "Nikita Pande, Syed Mahmood, Jugal Pumbhadia, Benjamin Coco",
+    description: "Addressed flood risks in Stapleton by improving flood modeling to better reflect both physical topography and human impacts. Analyzed how elevation and infrastructure contribute to floodwater accumulation and proposed community-centered green infrastructure solutions such as permeable pavements and sponge gardens.",
     isWinner: false,
-    tags: ["preparedness", "social-capital", "index"],
-    demoAvailable: false
-  },
-  // Staten Island
-  {
-    id: "si-compound-risk",
-    neighborhoodId: "staten-island-north",
-    title: "Compound Risk Assessment",
-    team: "Team Cascade",
-    description: "Modeling simultaneous exposure to coastal surge, extreme heat, and air quality degradation on the North Shore to understand how compound climate events interact and amplify vulnerability.",
-    isWinner: false,
-    tags: ["compound-risk", "modeling", "multi-hazard"],
-    demoAvailable: false
+    tags: ["flooding", "green-infrastructure", "topography", "community"],
+    demoAvailable: false,
+    datasets: ["NYC 1ft Digital Elevation Model (LiDAR)", "Zillow Home Index", "NYC Resilience AI Agent coastal flood data"]
   },
   {
-    id: "si-land-trust",
-    neighborhoodId: "staten-island-north",
-    title: "Climate Land Trust Feasibility",
-    team: "Team Tenure",
-    description: "Assessing the feasibility of a community land trust model on the North Shore that could preserve affordable housing while implementing climate resilience upgrades across a portfolio of properties.",
+    id: "titanosaurs",
+    neighborhoodId: "stapleton",
+    title: "",
+    team: "Titanosaurs",
+    members: "Devon James, Marilyn Moy, Mark Bauer, Milka Vincentiya, NJ Smith",
+    description: "Developed a rainfall prediction model and proposed FloodLinkNYC, a community-facing flood alert system using LinkNYC kiosks. Combines SARIMAX precipitation forecasting with public digital infrastructure to improve early warning and flood preparedness in vulnerable neighborhoods.",
     isWinner: false,
-    tags: ["housing", "land-trust", "policy"],
-    demoAvailable: false
-  },
-  {
-    id: "si-shoreline",
-    neighborhoodId: "staten-island-north",
-    title: "Living Shoreline Siting",
-    team: "Team Littoral",
-    description: "Identifying optimal locations for living shoreline installations along the North Shore using wave energy, sediment, and ecological data to maximize both protection and habitat co-benefits.",
-    isWinner: false,
-    tags: ["living-shoreline", "coastal", "ecology"],
-    demoAvailable: false
+    tags: ["flood-alerts", "precipitation-modeling", "early-warning", "community"],
+    demoAvailable: false,
+    datasets: ["FloodNYC sensor data", "Stapleton topography data", "Sea level rise projections", "Total Column Water Vapor data", "Historical rainfall 2019–2025", "LinkNYC infrastructure data"]
   }
 ];
 
@@ -223,7 +249,7 @@ const SITE_CONFIG = {
   date: "January 2026",
   location: "New York City",
   mapboxToken: typeof MAPBOX_TOKEN !== 'undefined' ? MAPBOX_TOKEN : '',
-  mapCenter: [-73.94, 40.72],
+  mapCenter: [-73.93, 40.73],
   mapZoom: 10.5,
   dataSources: [
     { name: "NYC Stormwater Flood Maps (Cloudburst)", url: "https://data.cityofnewyork.us/Environment/NYC-Stormwater-Flood-Maps/9i7c-xyvv/about_data", org: "NYC Open Data" },
@@ -231,10 +257,12 @@ const SITE_CONFIG = {
     { name: "Sea Level Rise Maps — 2050s", url: "https://data.cityofnewyork.us/Environment/Sea-Level-Rise-Maps-2050s-100-year-Floodplain-/hbw8-2bah", org: "NYC Open Data" },
     { name: "Sea Level Rise Maps — 2080s", url: "https://data.cityofnewyork.us/Environment/Sea-Level-Rise-Maps-2080s-100-year-Floodplain-/ek8y-fsqz/about_data", org: "NYC Open Data" },
     { name: "NYC Street Tree Census", url: "https://data.cityofnewyork.us/Environment/2015-Street-Tree-Census-Tree-Data/uvpi-gqnh", org: "NYC Parks" },
-    { name: "PFIRM Flood Insurance Rate Maps", url: "https://www.arcgis.com/apps/webappviewer/index.html?id=1c37d271fba14163bbb520517153d6d5", org: "FEMA / NYC" }
+    { name: "PFIRM Flood Insurance Rate Maps", url: "https://www.arcgis.com/apps/webappviewer/index.html?id=1c37d271fba14163bbb520517153d6d5", org: "FEMA / NYC" },
+    { name: "CorrDiff Downscaled Climate Dataset", url: "https://leap.columbia.edu", org: "LEAP / NVIDIA" },
+    { name: "FloodNet NYC Sensor Data", url: "https://www.floodnet.nyc", org: "FloodNet NYC" }
   ],
   sponsors: [
-    { name: "Leap NYC", url: "#" },
+    { name: "LEAP NYC", url: "#" },
     { name: "Urban Omnibus", url: "https://urbanomnibus.net" },
     { name: "NYC Department of City Planning", url: "https://www.nyc.gov/site/planning" },
     { name: "JupyterHub / 2i2c", url: "https://2i2c.org" }

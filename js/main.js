@@ -22,7 +22,7 @@ const OVERLAY_SOURCES = {
     opacity: 0.55
   },
   heat: { kind: 'raster', tiles: ['data/tiles/heat/{z}/{x}/{y}.png'],
-           tileSize: 256, opacity: 0.7, scheme: 'tms',
+           tileSize: 256, minzoom: 9, maxzoom: 14, opacity: 0.75, scheme: 'tms',
            attribution: 'Mean Surface Temp 2020-22 — NYC City Council' },
   pfirm:      { kind: 'raster',
                 tiles: [`${DCP_TILES}/2015PFIRMS/MapServer/tile/{z}/{y}/{x}`],
@@ -206,6 +206,8 @@ function addOverlayLayers() {
         type: 'raster',
         tiles: cfg.tiles,
         tileSize: cfg.tileSize,
+        ...(cfg.minzoom != null && { minzoom: cfg.minzoom }),
+        ...(cfg.maxzoom != null && { maxzoom: cfg.maxzoom }),
         ...(cfg.scheme && { scheme: cfg.scheme }),
         attribution: cfg.attribution || ''
       });
