@@ -772,95 +772,236 @@ section { position: relative; }
   color: rgba(245,242,236,0.3);
 }
 
+/* ---- Winners Accordion ---- */
 .winners-grid {
+  border-top: 1px solid rgba(245,242,236,0.12);
+}
+
+.winner-acc-item {
+  border-bottom: 1px solid rgba(245,242,236,0.12);
+}
+
+.winner-acc-trigger {
+  width: 100%;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1px;
-  background: rgba(245,242,236,0.08);
-  border: 1px solid rgba(245,242,236,0.08);
-}
-
-.winner-card {
-  padding: 2.5rem;
-  background: var(--ink);
-  transition: background var(--transition);
+  grid-template-columns: 5rem 9rem 1fr 2.5rem;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.75rem 0;
+  background: none;
+  border: none;
+  color: var(--paper);
+  cursor: pointer;
+  text-align: left;
   position: relative;
-  overflow: hidden;
+  transition: background var(--transition);
 }
 
-.winner-card:hover { background: #1A1D25; }
+.winner-acc-trigger:hover {
+  background: rgba(245,242,236,0.03);
+}
 
-.winner-card::before {
-  content: attr(data-rank);
-  position: absolute;
-  top: -0.5rem; right: 1rem;
+.winner-acc-item.open .winner-acc-trigger {
+  border-left: 3px solid var(--winner-gold);
+  padding-left: 1.25rem;
+  margin-left: -3px;
+}
+
+.acc-rank-bg {
   font-family: var(--serif);
-  font-size: 8rem;
-  color: rgba(245,242,236,0.03);
+  font-size: 4.5rem;
+  color: rgba(245,242,236,0.06);
   line-height: 1;
-  pointer-events: none;
+  user-select: none;
+  transition: color var(--transition);
 }
 
-.winner-rank {
+.winner-acc-item.open .acc-rank-bg {
+  color: rgba(196,135,26,0.18);
+}
+
+.acc-winner-label {
   font-family: var(--mono);
-  font-size: 0.65rem;
-  letter-spacing: 0.12em;
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--winner-gold);
-  margin-bottom: 0.75rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
 }
 
-.winner-rank::before {
+.acc-title-block {
+  min-width: 0;
+}
+
+.acc-title {
+  font-family: var(--serif);
+  font-size: 1.2rem;
+  color: var(--paper);
+  margin-bottom: 0.25rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.winner-acc-item.open .acc-title {
+  white-space: normal;
+}
+
+.acc-meta {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: rgba(245,242,236,0.3);
+}
+
+.acc-chevron {
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(245,242,236,0.2);
+  border-radius: 50%;
+  flex-shrink: 0;
+  justify-self: end;
+  position: relative;
+  transition: border-color var(--transition), transform var(--transition);
+}
+
+.acc-chevron::before,
+.acc-chevron::after {
   content: '';
-  display: inline-block;
-  width: 1.5rem; height: 1px;
+  position: absolute;
+  background: rgba(245,242,236,0.6);
+  transition: transform var(--transition), opacity var(--transition);
+}
+
+.acc-chevron::before {
+  width: 9px; height: 1px;
+}
+
+.acc-chevron::after {
+  width: 1px; height: 9px;
+}
+
+.winner-acc-item.open .acc-chevron {
+  border-color: var(--winner-gold);
+  transform: rotate(45deg);
+}
+
+.winner-acc-item.open .acc-chevron::before,
+.winner-acc-item.open .acc-chevron::after {
   background: var(--winner-gold);
 }
 
-.winner-card-title {
-  font-family: var(--serif);
-  font-size: 1.5rem;
-  color: var(--paper);
-  margin-bottom: 0.3rem;
+/* ---- Accordion expanded body ---- */
+.winner-acc-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.4s ease;
+  overflow: hidden;
 }
 
-.winner-card-team {
+.winner-acc-item.open .winner-acc-body {
+  grid-template-rows: 1fr;
+}
+
+.acc-content-grid {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: rgba(245,242,236,0.08);
+  border-top: 1px solid rgba(245,242,236,0.08);
+  margin-bottom: 1px;
+}
+
+.acc-block {
+  padding: 2rem 1.75rem;
+  background: var(--ink);
+}
+
+.acc-block-label {
   font-family: var(--mono);
-  font-size: 0.65rem;
-  letter-spacing: 0.08em;
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: rgba(245,242,236,0.35);
+  color: var(--winner-gold);
   margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(196,135,26,0.25);
 }
 
-.winner-card-desc {
-  font-size: 0.9rem;
+.acc-block-body {
+  font-size: 0.875rem;
   color: rgba(245,242,236,0.7);
-  line-height: 1.7;
+  line-height: 1.75;
   margin-bottom: 1.25rem;
 }
 
-.winner-eval-quote {
-  padding: 1rem 1.25rem;
+.acc-eval-quote {
+  padding: 0.875rem 1rem;
   border-left: 2px solid var(--winner-gold);
-  background: rgba(196,135,26,0.08);
+  background: rgba(196,135,26,0.07);
   font-style: italic;
-  font-size: 0.875rem;
-  color: rgba(245,242,236,0.8);
-  line-height: 1.6;
-  margin-bottom: 1rem;
+  font-size: 0.82rem;
+  color: rgba(245,242,236,0.75);
+  line-height: 1.65;
+  margin-bottom: 1.25rem;
 }
 
-.winner-eval-attr {
+.acc-eval-attr {
+  display: block;
   font-family: var(--mono);
-  font-size: 0.62rem;
+  font-size: 0.6rem;
   letter-spacing: 0.08em;
   color: var(--winner-gold);
   text-transform: uppercase;
   margin-top: 0.5rem;
+  font-style: normal;
+}
+
+.acc-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.acc-tags .tag-chip {
+  background: rgba(245,242,236,0.06);
+  color: rgba(245,242,236,0.4);
+  border-color: rgba(245,242,236,0.1);
+}
+
+.acc-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem 1rem;
+  border: 1px dashed rgba(245,242,236,0.1);
+  height: calc(100% - 2.5rem);
+  min-height: 140px;
+}
+
+.acc-placeholder-icon {
+  font-size: 1.5rem;
+  color: rgba(245,242,236,0.15);
+  margin-bottom: 0.75rem;
+  font-family: var(--mono);
+}
+
+.acc-placeholder-title {
+  font-size: 0.85rem;
+  color: rgba(245,242,236,0.4);
+  margin-bottom: 0.4rem;
+}
+
+.acc-placeholder-sub {
+  font-size: 0.75rem;
+  color: rgba(245,242,236,0.2);
+  line-height: 1.6;
 }
 
 /* ---- About / Methodology ---- */
@@ -1014,7 +1155,15 @@ footer .footer-meta {
   #map-panel { width: 100%; border-left: none; border-top: 1px solid var(--rule); height: 50vh; overflow-y: auto; }
   .about-grid { grid-template-columns: 1fr; }
   .resources-grid { grid-template-columns: 1fr; }
-  .winners-grid { grid-template-columns: 1fr; }
+  .winner-acc-trigger {
+    grid-template-columns: 3rem 1fr 2rem;
+    gap: 0.75rem;
+    padding: 1.25rem 0;
+  }
+  .acc-winner-label { display: none; }
+  .acc-rank-bg { font-size: 3rem; }
+  .acc-title { font-size: 1rem; }
+  .acc-content-grid { grid-template-columns: 1fr; }
   #projects-section, #winners-section, #about-section, #resources-section { padding: 3rem 1.5rem; }
   footer { flex-direction: column; gap: 0.5rem; text-align: center; }
 }

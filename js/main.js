@@ -436,6 +436,7 @@ function setupFilters() {
 // ---- Hero animation ----
 function animateHeroBoroughTags() {
   const tags = document.querySelectorAll('.borough-tag');
+  if (!tags.length) return;
   let i = 0;
   setInterval(() => {
     tags.forEach(t => t.classList.remove('highlighted'));
@@ -476,26 +477,72 @@ function setupNav() {
 // ---- Winners section ----
 function renderWinners() {
   const winners = PROJECTS.filter(p => p.isWinner).sort((a, b) => a.winnerRank - b.winnerRank);
-  const grid = document.getElementById('winners-grid');
+  const container = document.getElementById('winners-grid');
 
-  grid.innerHTML = winners.map(p => {
+  container.innerHTML = winners.map(p => {
     const nhood = NEIGHBORHOODS.find(n => n.id === p.neighborhoodId);
+    const displayTitle = p.title || p.team;
+    const meta = `${p.team}${nhood ? ' · ' + nhood.name + ', ' + nhood.borough : ''}`;
     return `
-      <div class="winner-card" data-rank="${p.winnerRank}">
-        <div class="winner-rank">Winner #${p.winnerRank}</div>
-        <div class="winner-card-title">${p.title}</div>
-        <div class="winner-card-team">${p.team} — ${nhood ? nhood.name : ''}</div>
-        <p class="winner-card-desc">${p.description}</p>
-        ${p.evalQuote ? `
-          <blockquote class="winner-eval-quote">
-            "${p.evalQuote}"
-            <div class="winner-eval-attr">— Evaluation Committee</div>
-          </blockquote>
-        ` : ''}
-        ${p.demoAvailable ? `<a href="#" class="demo-link" style="color: rgba(196,135,26,0.8); border-color: rgba(196,135,26,0.5);" onclick="return false;">View Project Demo →</a>` : ''}
+      <div class="winner-acc-item" data-id="${p.id}">
+        <button class="winner-acc-trigger" aria-expanded="false" onclick="toggleWinnerAcc('${p.id}')">
+          <span class="acc-rank-bg" aria-hidden="true">${p.winnerRank}</span>
+          <span class="acc-winner-label">Winner #${p.winnerRank}</span>
+          <div class="acc-title-block">
+            <div class="acc-title">${displayTitle}</div>
+            <div class="acc-meta">${meta}</div>
+          </div>
+          <span class="acc-chevron" aria-hidden="true"></span>
+        </button>
+        <div class="winner-acc-body" id="acc-body-${p.id}">
+          <div class="acc-content-grid">
+            <div class="acc-block">
+              <div class="acc-block-label">About</div>
+              <p class="acc-block-body">${p.description}</p>
+              ${p.evalQuote ? `
+                <blockquote class="acc-eval-quote">
+                  "${p.evalQuote}"
+                  <cite class="acc-eval-attr">— Evaluation Committee</cite>
+                </blockquote>
+              ` : ''}
+              <div class="acc-tags">${p.tags.map(t => `<span class="tag-chip">${t}</span>`).join('')}</div>
+            </div>
+            <div class="acc-block">
+              <div class="acc-block-label">Project Demo</div>
+              <div class="acc-placeholder">
+                <div class="acc-placeholder-icon">▶</div>
+                <p class="acc-placeholder-title">Demo coming soon</p>
+                <p class="acc-placeholder-sub">The interactive demo for this project will be embedded here once finalized.</p>
+              </div>
+            </div>
+            <div class="acc-block">
+              <div class="acc-block-label">Jupyter Notebook</div>
+              <div class="acc-placeholder">
+                <div class="acc-placeholder-icon">{ }</div>
+                <p class="acc-placeholder-title">Notebook coming soon</p>
+                <p class="acc-placeholder-sub">The team's Jupyter notebook and source code will be linked here.</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     `;
   }).join('');
+}
+
+function toggleWinnerAcc(id) {
+  const item = document.querySelector(`.winner-acc-item[data-id="${id}"]`);
+  const isOpen = item.classList.contains('open');
+
+  document.querySelectorAll('.winner-acc-item.open').forEach(el => {
+    el.classList.remove('open');
+    el.querySelector('.winner-acc-trigger').setAttribute('aria-expanded', 'false');
+  });
+
+  if (!isOpen) {
+    item.classList.add('open');
+    item.querySelector('.winner-acc-trigger').setAttribute('aria-expanded', 'true');
+  }
 }
 
 // ---- Init ----
