@@ -38,13 +38,13 @@ const OVERLAY_SOURCES = {
                 attribution: 'Future Floodplain 2080s — NYC DCP' }
 };
 
-// Neighborhood color map (matches content.js)
+// Neighborhood color map — LEAP brand palette
 const NHOOD_COLORS = {
-  'east-harlem': '#C8373A',
-  'soundview': '#1B5E8A',
-  'flushing': '#1D6B45',
-  'brownsville': '#6B2D8B',
-  'stapleton': '#C4611A'
+  'east-harlem': '#012169',
+  'soundview': '#00796B',
+  'flushing': '#0288D1',
+  'brownsville': '#004D40',
+  'stapleton': '#1565C0'
 };
 
 
@@ -90,11 +90,11 @@ function addNeighborhoodLayer() {
     paint: {
       'fill-color': [
         'match', ['get', 'id'],
-        'east-harlem', '#C8373A',
-        'soundview', '#1B5E8A',
-        'flushing', '#1D6B45',
-        'brownsville', '#6B2D8B',
-        'stapleton', '#C4611A',
+        'east-harlem', '#012169',
+        'soundview', '#00796B',
+        'flushing', '#0288D1',
+        'brownsville', '#004D40',
+        'stapleton', '#1565C0',
         '#888888'
       ],
       'fill-opacity': 0.15
@@ -109,11 +109,11 @@ function addNeighborhoodLayer() {
     paint: {
       'fill-color': [
         'match', ['get', 'id'],
-        'east-harlem', '#C8373A',
-        'soundview', '#1B5E8A',
-        'flushing', '#1D6B45',
-        'brownsville', '#6B2D8B',
-        'stapleton', '#C4611A',
+        'east-harlem', '#012169',
+        'soundview', '#00796B',
+        'flushing', '#0288D1',
+        'brownsville', '#004D40',
+        'stapleton', '#1565C0',
         '#888888'
       ],
       'fill-opacity': [
@@ -133,11 +133,11 @@ function addNeighborhoodLayer() {
     paint: {
       'line-color': [
         'match', ['get', 'id'],
-        'east-harlem', '#C8373A',
-        'soundview', '#1B5E8A',
-        'flushing', '#1D6B45',
-        'brownsville', '#6B2D8B',
-        'stapleton', '#C4611A',
+        'east-harlem', '#012169',
+        'soundview', '#00796B',
+        'flushing', '#0288D1',
+        'brownsville', '#004D40',
+        'stapleton', '#1565C0',
         '#888888'
       ],
       'line-width': [
@@ -275,7 +275,7 @@ function showLayerNote(id, message) {
     background: #0F1117; color: #F5F2EC; padding: 0.75rem 1rem;
     font-family: 'IBM Plex Mono', monospace; font-size: 0.62rem;
     letter-spacing: 0.05em; max-width: 280px; line-height: 1.65;
-    border-left: 2px solid #C4871A;
+    border-left: 2px solid #00796B;
   `;
   el.innerHTML = `${message}<br><button onclick="this.parentElement.remove()" style="margin-top:0.5rem;background:none;border:1px solid rgba(245,242,236,0.3);color:#F5F2EC;padding:0.2rem 0.5rem;cursor:pointer;font-family:inherit;font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;">Dismiss</button>`;
   document.getElementById('map-container').appendChild(el);
