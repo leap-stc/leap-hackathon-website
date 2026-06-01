@@ -486,10 +486,11 @@ function renderWinners() {
     return `
       <div class="winner-acc-item" data-id="${p.id}">
         <button class="winner-acc-trigger" aria-expanded="false" onclick="toggleWinnerAcc('${p.id}')">
-          <span class="acc-rank-bg" aria-hidden="true">${p.winnerRank}</span>
           <div class="acc-title-block">
-            <div class="acc-winner-label">${p.isWinnerCategory}</div>
-            <div class="acc-title">${displayTitle}</div>
+            <div class="acc-title-row">
+              <div class="acc-title">${displayTitle}</div>
+              <div class="acc-winner-label">${p.isWinnerCategory}</div>
+            </div>
             <div class="acc-meta">${meta}</div>
           </div>
           <span class="acc-chevron" aria-hidden="true"></span>
