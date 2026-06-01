@@ -784,7 +784,7 @@ section { position: relative; }
 .winner-acc-trigger {
   width: 100%;
   display: grid;
-  grid-template-columns: 5rem 9rem 1fr 2.5rem;
+  grid-template-columns: 4.5rem 1fr 2.5rem;
   align-items: center;
   gap: 1.5rem;
   padding: 1.75rem 0;
@@ -823,9 +823,9 @@ section { position: relative; }
 .acc-winner-label {
   font-family: var(--mono);
   font-size: 0.62rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  letter-spacing: 0.06em;
   color: var(--winner-gold);
+  margin-bottom: 0.3rem;
 }
 
 .acc-title-block {
@@ -906,30 +906,94 @@ section { position: relative; }
   grid-template-rows: 1fr;
 }
 
-.acc-content-grid {
+/* ---- Outer accordion inner wrapper ---- */
+.winner-acc-inner {
   min-height: 0;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
-  background: rgba(245,242,236,0.08);
   border-top: 1px solid rgba(245,242,236,0.08);
-  margin-bottom: 1px;
 }
 
-.acc-block {
-  padding: 2rem 1.75rem;
-  background: var(--ink);
+/* ---- Sub-accordion rows ---- */
+.sub-acc-item {
+  border-bottom: 1px solid rgba(245,242,236,0.08);
 }
 
-.acc-block-label {
-  font-family: var(--mono);
-  font-size: 0.6rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+.sub-acc-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 0 1rem 4.5rem;
+  background: none;
+  border: none;
+  color: var(--paper);
+  cursor: pointer;
+  text-align: left;
+  gap: 1rem;
+  transition: background var(--transition);
+}
+
+.sub-acc-trigger:hover {
+  background: rgba(245,242,236,0.03);
+}
+
+.sub-acc-item.open .sub-acc-trigger {
   color: var(--winner-gold);
-  margin-bottom: 1rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid rgba(196,135,26,0.25);
+}
+
+.sub-acc-label {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.sub-acc-chevron {
+  width: 1.1rem;
+  height: 1.1rem;
+  flex-shrink: 0;
+  border: 1px solid rgba(245,242,236,0.15);
+  border-radius: 50%;
+  position: relative;
+  transition: border-color var(--transition), transform var(--transition);
+}
+
+.sub-acc-chevron::before,
+.sub-acc-chevron::after {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(245,242,236,0.5);
+  transition: background var(--transition);
+}
+
+.sub-acc-chevron::before { width: 7px; height: 1px; }
+.sub-acc-chevron::after  { width: 1px; height: 7px; }
+
+.sub-acc-item.open .sub-acc-chevron {
+  border-color: var(--winner-gold);
+  transform: rotate(45deg);
+}
+
+.sub-acc-item.open .sub-acc-chevron::before,
+.sub-acc-item.open .sub-acc-chevron::after {
+  background: var(--winner-gold);
+}
+
+.sub-acc-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.35s ease;
+  overflow: hidden;
+}
+
+.sub-acc-item.open .sub-acc-body {
+  grid-template-rows: 1fr;
+}
+
+.sub-acc-content {
+  min-height: 0;
+  padding: 0 0 1.5rem 4.5rem;
 }
 
 .acc-block-body {
@@ -981,8 +1045,7 @@ section { position: relative; }
   text-align: center;
   padding: 2rem 1rem;
   border: 1px dashed rgba(245,242,236,0.1);
-  height: calc(100% - 2.5rem);
-  min-height: 140px;
+  max-width: 480px;
 }
 
 .acc-placeholder-icon {
@@ -1160,10 +1223,10 @@ footer .footer-meta {
     gap: 0.75rem;
     padding: 1.25rem 0;
   }
-  .acc-winner-label { display: none; }
   .acc-rank-bg { font-size: 3rem; }
   .acc-title { font-size: 1rem; }
-  .acc-content-grid { grid-template-columns: 1fr; }
+  .sub-acc-trigger { padding-left: 3rem; }
+  .sub-acc-content { padding-left: 3rem; }
   #projects-section, #winners-section, #about-section, #resources-section { padding: 3rem 1.5rem; }
   footer { flex-direction: column; gap: 0.5rem; text-align: center; }
 }
