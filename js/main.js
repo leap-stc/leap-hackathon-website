@@ -332,7 +332,7 @@ function buildNeighborhoodPanel(nhood) {
         <div class="project-card-mini" onclick="scrollToProject('${p.id}')">
           <div class="project-card-mini-title">
             ${p.title}
-            ${p.isWinner ? `<span class="winner-badge">★ Winner #${p.winnerRank}</span>` : ''}
+            ${p.isWinner ? `<span class="winner-badge">★ Winner</span>` : ''}
           </div>
           <div class="project-card-mini-team">${p.team}</div>
           <div class="project-card-mini-desc">${p.description}</div>
@@ -383,7 +383,7 @@ function renderProjects(filterNeighborhood = 'all', filterWinner = false) {
     const color = NHOOD_COLORS[p.neighborhoodId];
     return `
       <div class="project-card ${p.isWinner ? 'winner' : ''}" id="proj-${p.id}">
-        ${p.isWinner ? `<div class="winner-ribbon">Winner #${p.winnerRank}</div>` : ''}
+        ${p.isWinner ? `<div class="winner-ribbon">Winner</div>` : ''}
         <div class="project-card-top">
           <div>
             <div class="project-card-title">${p.title}</div>
