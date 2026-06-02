@@ -118,7 +118,7 @@ All content (neighborhoods, projects, site config) lives in `data/content.js`.
 ```
 
 ### Adding a winner
-Set `isWinner: true` and `winnerRank: 1` (1–4), and optionally add `evalQuote`.
+Set `isWinner: true`, add `isWinnerCategory`, and optionally add `evalQuote`.
 
 ### Updating neighborhood descriptions
 Edit the `description` and `pullQuote` fields in the `NEIGHBORHOODS` array.

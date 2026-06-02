@@ -476,7 +476,7 @@ function setupNav() {
 
 // ---- Winners section ----
 function renderWinners() {
-  const winners = PROJECTS.filter(p => p.isWinner).sort((a, b) => a.winnerRank - b.winnerRank);
+  const winners = PROJECTS.filter(p => p.isWinner);
   const container = document.getElementById('winners-grid');
 
   container.innerHTML = winners.map(p => {
