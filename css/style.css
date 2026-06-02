@@ -953,6 +953,10 @@ section { position: relative; }
   border-top: 1px solid rgba(185, 217, 235, 0.08);
 }
 
+.winner-acc-content {
+  padding: 1.5rem 0;
+}
+
 /* ---- Sub-accordion rows ---- */
 .sub-acc-item {
   border-bottom: 1px solid rgba(185, 217, 235, 0.08);

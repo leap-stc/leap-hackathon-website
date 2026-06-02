@@ -497,53 +497,15 @@ function renderWinners() {
         </button>
         <div class="winner-acc-body">
           <div class="winner-acc-inner">
-            <div class="sub-acc-item" data-sub="about">
-              <button class="sub-acc-trigger" aria-expanded="false" onclick="toggleSubAcc('${p.id}', 'about')">
-                <span class="sub-acc-label">About</span>
-                <span class="sub-acc-chevron" aria-hidden="true"></span>
-              </button>
-              <div class="sub-acc-body">
-                <div class="sub-acc-content">
-                  <p class="acc-block-body">${p.description}</p>
-                  ${p.evalQuote ? `
-                    <blockquote class="acc-eval-quote">
-                      "${p.evalQuote}"
-                      <cite class="acc-eval-attr">— Evaluation Committee</cite>
-                    </blockquote>
-                  ` : ''}
-                  <div class="acc-tags">${p.tags.map(t => `<span class="tag-chip">${t}</span>`).join('')}</div>
-                </div>
-              </div>
-            </div>
-            <div class="sub-acc-item" data-sub="demo">
-              <button class="sub-acc-trigger" aria-expanded="false" onclick="toggleSubAcc('${p.id}', 'demo')">
-                <span class="sub-acc-label">Project Demo</span>
-                <span class="sub-acc-chevron" aria-hidden="true"></span>
-              </button>
-              <div class="sub-acc-body">
-                <div class="sub-acc-content">
-                  <div class="acc-placeholder">
-                    <div class="acc-placeholder-icon">▶</div>
-                    <p class="acc-placeholder-title">Demo coming soon</p>
-                    <p class="acc-placeholder-sub">The interactive demo for this project will be embedded here once finalized.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="sub-acc-item" data-sub="notebook">
-              <button class="sub-acc-trigger" aria-expanded="false" onclick="toggleSubAcc('${p.id}', 'notebook')">
-                <span class="sub-acc-label">Jupyter Notebook</span>
-                <span class="sub-acc-chevron" aria-hidden="true"></span>
-              </button>
-              <div class="sub-acc-body">
-                <div class="sub-acc-content">
-                  <div class="acc-placeholder">
-                    <div class="acc-placeholder-icon">{ }</div>
-                    <p class="acc-placeholder-title">Notebook coming soon</p>
-                    <p class="acc-placeholder-sub">The team's Jupyter notebook and source code will be linked here.</p>
-                  </div>
-                </div>
-              </div>
+            <div class="winner-acc-content">
+              <p class="acc-block-body">${p.description}</p>
+              ${p.evalQuote ? `
+                <blockquote class="acc-eval-quote">
+                  "${p.evalQuote}"
+                  <cite class="acc-eval-attr">— Evaluation Committee</cite>
+                </blockquote>
+              ` : ''}
+              <div class="acc-tags">${p.tags.map(t => `<span class="tag-chip">${t}</span>`).join('')}</div>
             </div>
           </div>
         </div>
@@ -559,23 +521,12 @@ function toggleWinnerAcc(id) {
   document.querySelectorAll('.winner-acc-item.open').forEach(el => {
     el.classList.remove('open');
     el.querySelector('.winner-acc-trigger').setAttribute('aria-expanded', 'false');
-    el.querySelectorAll('.sub-acc-item.open').forEach(sub => {
-      sub.classList.remove('open');
-      sub.querySelector('.sub-acc-trigger').setAttribute('aria-expanded', 'false');
-    });
   });
 
   if (!isOpen) {
     item.classList.add('open');
     item.querySelector('.winner-acc-trigger').setAttribute('aria-expanded', 'true');
   }
-}
-
-function toggleSubAcc(projectId, subId) {
-  const item = document.querySelector(`.winner-acc-item[data-id="${projectId}"] .sub-acc-item[data-sub="${subId}"]`);
-  const isOpen = item.classList.contains('open');
-  item.classList.toggle('open');
-  item.querySelector('.sub-acc-trigger').setAttribute('aria-expanded', String(!isOpen));
 }
 
 // ---- Init ----
