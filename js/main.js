@@ -323,6 +323,9 @@ function showNeighborhoodPanel(neighborhoodId) {
 
   activeNeighborhood = neighborhoodId;
 
+  removeRainGardens();
+  if (neighborhoodId === 'flushing') loadRainGardens();
+
   // Hide default, show neighborhood panel
   document.getElementById('panel-default').style.display = 'none';
   const panels = document.querySelectorAll('.panel-neighborhood');
@@ -381,6 +384,7 @@ function buildNeighborhoodPanel(nhood) {
 
 function closeNeighborhoodPanel() {
   activeNeighborhood = null;
+  removeRainGardens();
   document.getElementById('panel-default').style.display = 'flex';
   document.querySelectorAll('.panel-neighborhood').forEach(p => p.classList.remove('active'));
   map.flyTo({ center: SITE_CONFIG.mapCenter, zoom: SITE_CONFIG.mapZoom, duration: 800 });
