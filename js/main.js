@@ -281,6 +281,41 @@ function showLayerNote(id, message) {
   document.getElementById('map-container').appendChild(el);
 }
 
+// ---- Rain Gardens (Flushing only) ----
+function removeRainGardens() {
+  if (map.getLayer('rain-gardens-layer')) map.removeLayer('rain-gardens-layer');
+  if (map.getSource('rain-gardens-flushing')) map.removeSource('rain-gardens-flushing');
+}
+
+function loadRainGardens() {
+  const url = `https://data.cityofnewyork.us/resource/df32-vzax.geojson?$where=latitude > 40.74 AND latitude < 40.78 AND longitude > -73.84 AND longitude < -73.78&$limit=500`;
+  fetch(url)
+    .then(res => {
+      if (!res.ok) throw new Error(`Rain gardens fetch failed: ${res.status}`);
+      return res.json();
+    })
+    .then(data => {
+      if (!map.getSource('rain-gardens-flushing')) {
+        map.addSource('rain-gardens-flushing', { type: 'geojson', data });
+      }
+      if (!map.getLayer('rain-gardens-layer')) {
+        map.addLayer({
+          id: 'rain-gardens-layer',
+          type: 'circle',
+          source: 'rain-gardens-flushing',
+          paint: {
+            'circle-color': '#22c55e',
+            'circle-radius': 5,
+            'circle-opacity': 0.8,
+            'circle-stroke-color': '#16a34a',
+            'circle-stroke-width': 1
+          }
+        });
+      }
+    })
+    .catch(err => console.error('Rain gardens:', err));
+}
+
 // ---- Neighborhood Panel ----
 function showNeighborhoodPanel(neighborhoodId) {
   const nhood = NEIGHBORHOODS.find(n => n.id === neighborhoodId);
