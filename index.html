@@ -45,10 +45,16 @@
     </div>
 
     <div id="neighborhood-state" hidden>
-      <button id="neighborhood-back-btn" onclick="closeNeighborhoodPanel()">← All Neighborhoods</button>
+      <div id="neighborhood-state-header">
+        <button id="neighborhood-back-btn" onclick="closeNeighborhoodPanel()">← All Neighborhoods</button>
+        <div>
+          <h3 id="nhood-name"></h3>
+          <p id="nhood-borough" class="label"></p>
+        </div>
+      </div>
       <div id="neighborhood-state-body">
-        <p class="label" id="nhood-name"></p>
-        <p id="nhood-desc"></p>
+        <p id="nhood-col1"></p>
+        <p id="nhood-col2"></p>
       </div>
     </div>
 

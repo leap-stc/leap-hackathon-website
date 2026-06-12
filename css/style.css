@@ -363,15 +363,21 @@ section { position: relative; }
 /* ---- State 2: Neighborhood bar ---- */
 #neighborhood-state {
   flex-shrink: 0;
-  display: flex;
-  align-items: flex-start;
-  gap: 1.5rem;
-  padding: 1rem 2rem;
   background: var(--navy);
   border-bottom: 1px solid rgba(255,255,255,0.12);
+  padding: 1.25rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 #neighborhood-state[hidden] { display: none; }
+
+#neighborhood-state-header {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
 
 #neighborhood-back-btn {
   flex-shrink: 0;
@@ -385,28 +391,42 @@ section { position: relative; }
   text-transform: uppercase;
   padding: 0.35rem 0.75rem;
   cursor: pointer;
-  margin-top: 0.1rem;
 }
 
 #neighborhood-back-btn:hover {
   background: rgba(255,255,255,0.1);
 }
 
-#neighborhood-state-body {
-  flex: 1;
-}
-
 #nhood-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.15rem;
+  font-weight: 700;
   color: #F5F2EC;
-  margin: 0 0 0.35rem;
+  margin: 0 0 0.1rem;
 }
 
-#nhood-desc {
+#nhood-borough {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(245,242,236,0.5);
+  margin: 0;
+}
+
+#neighborhood-state-body {
+  display: flex;
+  gap: 3rem;
+}
+
+#neighborhood-state-body p {
+  flex: 1;
   font-size: 0.875rem;
-  line-height: 1.7;
+  line-height: 1.75;
   color: rgba(245,242,236,0.75);
   margin: 0;
-  max-width: 80ch;
+  max-width: 60ch;
 }
 
 /* ---- State 2: Neighborhood project cards ---- */
