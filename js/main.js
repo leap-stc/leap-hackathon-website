@@ -368,67 +368,13 @@ function showNeighborhoodPanel(neighborhoodId) {
   removeRainGardens();
   if (neighborhoodId === 'flushing') loadRainGardens();
 
-  // Hide default, show neighborhood panel
-  document.getElementById('panel-default').style.display = 'none';
-  const panels = document.querySelectorAll('.panel-neighborhood');
-  panels.forEach(p => p.classList.remove('active'));
-
-  let panel = document.getElementById(`panel-nhood-${neighborhoodId}`);
-  if (!panel) {
-    panel = buildNeighborhoodPanel(nhood);
-    document.getElementById('map-panel').appendChild(panel);
-  }
-  panel.classList.add('active');
-
-  // Fly to neighborhood
   map.flyTo({ center: nhood.coordinates, zoom: 13, duration: 1000 });
-
-  // Highlight on map
   updateActiveNeighborhoodStyle(neighborhoodId);
-}
-
-function buildNeighborhoodPanel(nhood) {
-  const projects = PROJECTS.filter(p => p.neighborhoodId === nhood.id);
-  const color = NHOOD_COLORS[nhood.id];
-
-  const panel = document.createElement('div');
-  panel.id = `panel-nhood-${nhood.id}`;
-  panel.className = 'panel-neighborhood';
-
-  panel.innerHTML = `
-    <div class="panel-nhood-header">
-      <div class="panel-nhood-color-bar" style="background: ${color};"></div>
-      <div class="back-btn" onclick="closeNeighborhoodPanel()">← All neighborhoods</div>
-      <div class="panel-nhood-borough">${nhood.borough}</div>
-      <div class="panel-nhood-name">${nhood.name}</div>
-    </div>
-    <div class="panel-nhood-body">
-      <p class="panel-nhood-desc">${nhood.description}</p>
-      <blockquote class="panel-pullquote" style="border-color: ${color};">
-        "${nhood.pullQuote}"
-      </blockquote>
-      <div class="panel-projects-title">${projects.length} Projects</div>
-      ${projects.map(p => `
-        <div class="project-card-mini" onclick="scrollToProject('${p.id}')">
-          <div class="project-card-mini-title">
-            ${p.title}
-            ${p.isWinner ? `<span class="winner-badge">★ Winner</span>` : ''}
-          </div>
-          <div class="project-card-mini-team">${p.team}</div>
-          <div class="project-card-mini-desc">${p.description}</div>
-        </div>
-      `).join('')}
-    </div>
-  `;
-
-  return panel;
 }
 
 function closeNeighborhoodPanel() {
   activeNeighborhood = null;
   removeRainGardens();
-  document.getElementById('panel-default').style.display = 'flex';
-  document.querySelectorAll('.panel-neighborhood').forEach(p => p.classList.remove('active'));
   map.flyTo({ center: SITE_CONFIG.mapCenter, zoom: SITE_CONFIG.mapZoom, duration: 800 });
   clearActiveNeighborhoodStyle();
 }
