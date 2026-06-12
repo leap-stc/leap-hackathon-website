@@ -124,6 +124,7 @@ const NHOOD_COLORS = {
 // ---- Map initialization ----
 let map;
 let activeNeighborhood = null;
+let neighborhoodGeometries = {};
 
 function initMap() {
   mapboxgl.accessToken = SITE_CONFIG.mapboxToken;
@@ -139,6 +140,14 @@ function initMap() {
 
   map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'bottom-right');
   map.addControl(new mapboxgl.ScaleControl({ maxWidth: 100, unit: 'imperial' }), 'bottom-left');
+
+  fetch('data/neighborhoods.geojson')
+    .then(r => r.json())
+    .then(gj => {
+      gj.features.forEach(f => {
+        neighborhoodGeometries[f.properties.id] = f.geometry;
+      });
+    });
 
   map.on('load', () => {
     addNeighborhoodLayer();
@@ -357,7 +366,7 @@ function showLayerNote(id, message) {
 }
 
 // ---- Rain Gardens (Flushing only) ----
-function fetchAndAddNeighborhoodLayer(cfg) {
+function fetchAndAddNeighborhoodLayer(cfg, polygon) {
   fetch(cfg.fetchUrl)
     .then(res => {
       if (!res.ok) throw new Error(`Layer fetch failed: ${res.status}`);
@@ -368,7 +377,9 @@ function fetchAndAddNeighborhoodLayer(cfg) {
         map.addSource(cfg.sourceId, { type: 'geojson', data });
       }
       if (!map.getLayer(cfg.layerId)) {
-        map.addLayer({ id: cfg.layerId, type: 'circle', source: cfg.sourceId, paint: cfg.paint });
+        const layerDef = { id: cfg.layerId, type: 'circle', source: cfg.sourceId, paint: cfg.paint };
+        if (polygon) layerDef.filter = ['within', polygon];
+        map.addLayer(layerDef);
       }
     })
     .catch(err => console.error(`Neighborhood layer ${cfg.id}:`, err));
@@ -405,6 +416,7 @@ function showNeighborhoodLayers(neighborhoodId) {
     panel.setAttribute('hidden', '');
     return;
   }
+  const polygon = neighborhoodGeometries[neighborhoodId] || null;
   panel.innerHTML = `<div class="control-panel-title">${NEIGHBORHOODS.find(n => n.id === neighborhoodId)?.name} Data</div>` +
     layers.map(l => `
       <label class="layer-toggle">
@@ -418,7 +430,7 @@ function showNeighborhoodLayers(neighborhoodId) {
       const cfg = layers.find(l => l.id === cb.dataset.layer);
       if (!cfg) return;
       if (cb.checked) {
-        fetchAndAddNeighborhoodLayer(cfg);
+        fetchAndAddNeighborhoodLayer(cfg, polygon);
       } else {
         removeNeighborhoodLayer(cfg);
       }
