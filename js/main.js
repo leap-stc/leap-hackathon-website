@@ -481,6 +481,7 @@ function showNeighborhoodPanel(neighborhoodId) {
   // Build and show project cards for this neighborhood
   const projects = PROJECTS.filter(p => p.neighborhoodId === neighborhoodId);
   const inner = document.getElementById('neighborhood-projects-inner');
+  inner.style.gridTemplateColumns = `repeat(${projects.length}, 1fr)`;
   inner.innerHTML = projects.map(p => `
     <div class="nhood-project-card${p.isWinner ? ' nhood-project-card--winner' : ''}">
       ${p.isWinner ? `<span class="nhood-winner-tag">${p.isWinnerCategory}</span>` : ''}
@@ -506,7 +507,9 @@ function closeNeighborhoodPanel() {
 
   document.getElementById('neighborhood-state').setAttribute('hidden', '');
   document.getElementById('neighborhood-projects').setAttribute('hidden', '');
-  document.getElementById('neighborhood-projects-inner').innerHTML = '';
+  const inner = document.getElementById('neighborhood-projects-inner');
+  inner.style.gridTemplateColumns = '';
+  inner.innerHTML = '';
 }
 
 function updateActiveNeighborhoodStyle(id) {

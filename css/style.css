@@ -440,8 +440,8 @@ section { position: relative; }
 
 #neighborhood-projects-inner {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 1rem;
+  /* grid-template-columns set dynamically by JS to repeat(N, 1fr) */
 }
 
 .nhood-project-card {
