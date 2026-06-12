@@ -411,7 +411,6 @@ section { position: relative; }
 
 /* ---- State 2: Neighborhood project cards ---- */
 #neighborhood-projects {
-  flex-shrink: 0;
   border-top: 1px solid var(--rule);
   background: var(--paper);
   padding: 1.25rem 2rem;
@@ -488,7 +487,6 @@ section { position: relative; }
 
 /* ---- Layer descriptions ---- */
 #layer-descriptions {
-  flex-shrink: 0;
   background: var(--paper-warm);
   border-top: 1px solid var(--rule);
 }
