@@ -360,6 +360,31 @@ section { position: relative; }
   max-width: 60ch;
 }
 
+#layer-description-panel {
+  flex-shrink: 0;
+  background: var(--paper-warm);
+  border-top: 1px solid var(--rule);
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: baseline;
+  gap: 1.5rem;
+}
+
+#layer-description-panel[hidden] { display: none; }
+
+#ldp-title {
+  white-space: nowrap;
+  flex-shrink: 0;
+  color: var(--navy);
+}
+
+#ldp-body {
+  font-size: 0.875rem;
+  line-height: 1.7;
+  color: #2a3a5a;
+  margin: 0;
+}
+
 #map-section-inner {
   flex: 1;
   display: flex;

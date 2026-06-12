@@ -38,6 +38,29 @@ const OVERLAY_SOURCES = {
                 attribution: 'Future Floodplain 2080s — NYC DCP' }
 };
 
+const LAYER_DESCRIPTIONS = {
+  cloudburst: {
+    title: 'Cloudburst Flooding',
+    body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. This layer maps areas at risk of stormwater flooding during moderate cloudburst events, based on NYC stormwater flood modeling. Blue zones indicate predicted inundation under moderate storm conditions across the five boroughs.'
+  },
+  heat: {
+    title: 'Urban Heat',
+    body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mean surface temperature data from 2020–2022, sourced from NYC City Council. Warmer tones highlight neighborhoods with the greatest heat burden — typically areas with dense pavement, limited tree canopy, and lower access to cooling resources.'
+  },
+  pfirm: {
+    title: 'PFIRM 2015 Flood Zones',
+    body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. FEMA\'s Preliminary Flood Insurance Rate Maps show regulatory flood risk zones across New York City, distinguishing between 1% annual chance (100-year) and 0.2% annual chance (500-year) floodplains based on current conditions.'
+  },
+  surge2050: {
+    title: 'Coastal Surge 2050s',
+    body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Projected 100-year floodplain under 2050s sea level rise scenarios, developed by NYC Department of City Planning. This layer reflects moderate acceleration in coastal flood risk driven by rising seas and intensifying storm surge over the coming decades.'
+  },
+  surge2080: {
+    title: 'Coastal Surge 2080s',
+    body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Projected 100-year floodplain under 2080s sea level rise scenarios — the most severe long-term outlook modeled by NYC DCP. Communities shown here face significant displacement and infrastructure risk by end of century without major adaptation.'
+  }
+};
+
 // Neighborhood color map (matches content.js)
 const NHOOD_COLORS = {
   'east-harlem': '#C8373A',
@@ -260,6 +283,25 @@ function setupLayerToggles() {
       // Vector layers also have a companion line layer
       if (map.getLayer(`overlay-${layerId}-line`)) {
         map.setLayoutProperty(`overlay-${layerId}-line`, 'visibility', visibility);
+      }
+
+      // Layer description panel
+      const desc = LAYER_DESCRIPTIONS[layerId];
+      if (toggle.checked && desc) {
+        document.getElementById('ldp-title').textContent = desc.title;
+        document.getElementById('ldp-body').textContent = desc.body;
+        document.getElementById('layer-description-panel').removeAttribute('hidden');
+      } else {
+        const anyActive = Array.from(
+          document.querySelectorAll('.layer-toggle input[type="checkbox"]')
+        ).find(cb => cb !== toggle && cb.checked && LAYER_DESCRIPTIONS[cb.dataset.layer]);
+        if (anyActive) {
+          const d = LAYER_DESCRIPTIONS[anyActive.dataset.layer];
+          document.getElementById('ldp-title').textContent = d.title;
+          document.getElementById('ldp-body').textContent = d.body;
+        } else {
+          document.getElementById('layer-description-panel').setAttribute('hidden', '');
+        }
       }
 
     });
