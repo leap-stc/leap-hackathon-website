@@ -63,7 +63,56 @@ const LAYER_DESCRIPTIONS = {
     title: 'Coastal Surge 2080s',
     body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Projected 100-year floodplain under 2080s sea level rise scenarios — the most severe long-term outlook modeled by NYC DCP. Communities shown here face significant displacement and infrastructure risk by end of century without major adaptation.',
     source: 'NYC Department of City Planning — Future Floodplain 2080s'
+  },
+  'flushing-rain-gardens': {
+    title: 'Rain Gardens',
+    body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Green infrastructure assets constructed by NYC DEP to capture and filter stormwater runoff before it enters the combined sewer system. Each installation reduces the volume of untreated sewage discharged into Flushing Bay during storm events.',
+    source: 'NYC DEP — Green Infrastructure Map'
+  },
+  'flushing-cso': {
+    title: 'Combined Sewer Overflow',
+    body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In combined sewer areas, a single pipe carries both stormwater and sewage. During heavy rain events, the system overflows directly into waterways. This layer shows DEP green infrastructure assets specifically built in combined sewer drainage areas to reduce overflow frequency and volume.',
+    source: 'NYC DEP — Green Infrastructure Map'
   }
+};
+
+const NEIGHBORHOOD_LAYERS = {
+  flushing: [
+    {
+      id: 'flushing-rain-gardens',
+      label: 'Rain Gardens',
+      color: '#22c55e',
+      sourceId: 'src-flushing-rain-gardens',
+      layerId: 'lyr-flushing-rain-gardens',
+      fetchUrl: 'https://data.cityofnewyork.us/resource/df32-vzax.geojson?' +
+        '$where=' + encodeURIComponent("latitude > 40.74 AND latitude < 40.78 AND longitude > -73.84 AND longitude < -73.78") +
+        '&$limit=1000',
+      paint: {
+        'circle-color': '#22c55e',
+        'circle-radius': 4,
+        'circle-opacity': 0.85,
+        'circle-stroke-color': '#16a34a',
+        'circle-stroke-width': 1
+      }
+    },
+    {
+      id: 'flushing-cso',
+      label: 'Combined Sewer Overflow',
+      color: '#6366f1',
+      sourceId: 'src-flushing-cso',
+      layerId: 'lyr-flushing-cso',
+      fetchUrl: 'https://data.cityofnewyork.us/resource/df32-vzax.geojson?' +
+        '$where=' + encodeURIComponent("latitude > 40.74 AND latitude < 40.78 AND longitude > -73.84 AND longitude < -73.78 AND sewer_type = 'Combined'") +
+        '&$limit=1000',
+      paint: {
+        'circle-color': '#6366f1',
+        'circle-radius': 5,
+        'circle-opacity': 0.75,
+        'circle-stroke-color': '#4338ca',
+        'circle-stroke-width': 1.5
+      }
+    }
+  ]
 };
 
 // Neighborhood color map (matches content.js)
@@ -290,22 +339,7 @@ function setupLayerToggles() {
         map.setLayoutProperty(`overlay-${layerId}-line`, 'visibility', visibility);
       }
 
-      // Layer description panel — stacking per-layer blocks
-      const container = document.getElementById('layer-descriptions');
-      const desc = LAYER_DESCRIPTIONS[layerId];
-      if (!desc) return;
-      if (toggle.checked) {
-        const block = document.createElement('div');
-        block.className = 'layer-desc-block';
-        block.dataset.layer = layerId;
-        block.innerHTML = `<p class="label ldb-title">${desc.title}</p><p class="ldb-body">${desc.body}</p><p class="ldb-source">Source: ${desc.source}</p>`;
-        container.appendChild(block);
-        container.removeAttribute('hidden');
-      } else {
-        const block = container.querySelector(`.layer-desc-block[data-layer="${layerId}"]`);
-        if (block) block.remove();
-        if (container.children.length === 0) container.setAttribute('hidden', '');
-      }
+      setLayerDescriptionVisible(layerId, toggle.checked);
 
     });
   });
@@ -327,38 +361,86 @@ function showLayerNote(id, message) {
 }
 
 // ---- Rain Gardens (Flushing only) ----
-function removeRainGardens() {
-  if (map.getLayer('rain-gardens-layer')) map.removeLayer('rain-gardens-layer');
-  if (map.getSource('rain-gardens-flushing')) map.removeSource('rain-gardens-flushing');
-}
-
-function loadRainGardens() {
-  const url = `https://data.cityofnewyork.us/resource/df32-vzax.geojson?$where=latitude > 40.74 AND latitude < 40.78 AND longitude > -73.84 AND longitude < -73.78&$limit=500`;
-  fetch(url)
+function fetchAndAddNeighborhoodLayer(cfg) {
+  fetch(cfg.fetchUrl)
     .then(res => {
-      if (!res.ok) throw new Error(`Rain gardens fetch failed: ${res.status}`);
+      if (!res.ok) throw new Error(`Layer fetch failed: ${res.status}`);
       return res.json();
     })
     .then(data => {
-      if (!map.getSource('rain-gardens-flushing')) {
-        map.addSource('rain-gardens-flushing', { type: 'geojson', data });
+      if (!map.getSource(cfg.sourceId)) {
+        map.addSource(cfg.sourceId, { type: 'geojson', data });
       }
-      if (!map.getLayer('rain-gardens-layer')) {
-        map.addLayer({
-          id: 'rain-gardens-layer',
-          type: 'circle',
-          source: 'rain-gardens-flushing',
-          paint: {
-            'circle-color': '#22c55e',
-            'circle-radius': 5,
-            'circle-opacity': 0.8,
-            'circle-stroke-color': '#16a34a',
-            'circle-stroke-width': 1
-          }
-        });
+      if (!map.getLayer(cfg.layerId)) {
+        map.addLayer({ id: cfg.layerId, type: 'circle', source: cfg.sourceId, paint: cfg.paint });
       }
     })
-    .catch(err => console.error('Rain gardens:', err));
+    .catch(err => console.error(`Neighborhood layer ${cfg.id}:`, err));
+}
+
+function removeNeighborhoodLayer(cfg) {
+  if (map.getLayer(cfg.layerId)) map.removeLayer(cfg.layerId);
+  if (map.getSource(cfg.sourceId)) map.removeSource(cfg.sourceId);
+}
+
+function setLayerDescriptionVisible(layerId, visible) {
+  const container = document.getElementById('layer-descriptions');
+  if (visible) {
+    if (container.querySelector(`.layer-desc-block[data-layer="${layerId}"]`)) return;
+    const desc = LAYER_DESCRIPTIONS[layerId];
+    if (!desc) return;
+    const block = document.createElement('div');
+    block.className = 'layer-desc-block';
+    block.dataset.layer = layerId;
+    block.innerHTML = `<p class="label ldb-title">${desc.title}</p><p class="ldb-body">${desc.body}</p><p class="ldb-source">Source: ${desc.source}</p>`;
+    container.appendChild(block);
+    container.removeAttribute('hidden');
+  } else {
+    const block = container.querySelector(`.layer-desc-block[data-layer="${layerId}"]`);
+    if (block) block.remove();
+    if (container.children.length === 0) container.setAttribute('hidden', '');
+  }
+}
+
+function showNeighborhoodLayers(neighborhoodId) {
+  const layers = NEIGHBORHOOD_LAYERS[neighborhoodId];
+  const panel = document.getElementById('neighborhood-layers-control');
+  if (!layers || layers.length === 0) {
+    panel.setAttribute('hidden', '');
+    return;
+  }
+  panel.innerHTML = `<div class="control-panel-title">${NEIGHBORHOODS.find(n => n.id === neighborhoodId)?.name} Data</div>` +
+    layers.map(l => `
+      <label class="layer-toggle">
+        <input type="checkbox" data-layer="${l.id}" data-nhood-layer="true">
+        <div class="layer-dot" style="background: ${l.color};"></div>
+        <span>${l.label}</span>
+      </label>
+    `).join('');
+  panel.querySelectorAll('input[type=checkbox]').forEach(cb => {
+    cb.addEventListener('change', () => {
+      const cfg = layers.find(l => l.id === cb.dataset.layer);
+      if (!cfg) return;
+      if (cb.checked) {
+        fetchAndAddNeighborhoodLayer(cfg);
+      } else {
+        removeNeighborhoodLayer(cfg);
+      }
+      setLayerDescriptionVisible(cb.dataset.layer, cb.checked);
+    });
+  });
+  panel.removeAttribute('hidden');
+}
+
+function hideNeighborhoodLayers(neighborhoodId) {
+  const layers = NEIGHBORHOOD_LAYERS[neighborhoodId] || [];
+  layers.forEach(cfg => {
+    removeNeighborhoodLayer(cfg);
+    setLayerDescriptionVisible(cfg.id, false);
+  });
+  const panel = document.getElementById('neighborhood-layers-control');
+  panel.innerHTML = '';
+  panel.setAttribute('hidden', '');
 }
 
 // ---- Neighborhood Panel ----
@@ -366,10 +448,8 @@ function showNeighborhoodPanel(neighborhoodId) {
   const nhood = NEIGHBORHOODS.find(n => n.id === neighborhoodId);
   if (!nhood) return;
 
+  if (activeNeighborhood) hideNeighborhoodLayers(activeNeighborhood);
   activeNeighborhood = neighborhoodId;
-
-  removeRainGardens();
-  if (neighborhoodId === 'flushing') loadRainGardens();
 
   // Lock the map area to its current height so it doesn't shrink when
   // the neighborhood description panel is inserted above it.
@@ -387,6 +467,9 @@ function showNeighborhoodPanel(neighborhoodId) {
   document.getElementById('nhood-col2').textContent = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
   document.getElementById('neighborhood-state').removeAttribute('hidden');
 
+  // Show neighborhood-specific layer toggles
+  showNeighborhoodLayers(neighborhoodId);
+
   // Build and show project cards for this neighborhood
   const projects = PROJECTS.filter(p => p.neighborhoodId === neighborhoodId);
   const inner = document.getElementById('neighborhood-projects-inner');
@@ -403,8 +486,8 @@ function showNeighborhoodPanel(neighborhoodId) {
 }
 
 function closeNeighborhoodPanel() {
+  if (activeNeighborhood) hideNeighborhoodLayers(activeNeighborhood);
   activeNeighborhood = null;
-  removeRainGardens();
   map.flyTo({ center: SITE_CONFIG.mapCenter, zoom: SITE_CONFIG.mapZoom, duration: 800 });
   clearActiveNeighborhoodStyle();
 

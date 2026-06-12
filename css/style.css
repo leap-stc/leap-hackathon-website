@@ -586,6 +586,17 @@ section { position: relative; }
   box-shadow: 0 2px 8px rgba(1, 33, 105, 0.1);
 }
 
+#neighborhood-layers-control {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-top: 3px solid #1D6B45;
+  padding: 1rem 1.25rem;
+  min-width: 200px;
+  box-shadow: 0 2px 8px rgba(1, 33, 105, 0.1);
+}
+
+#neighborhood-layers-control[hidden] { display: none; }
+
 .control-panel-title {
   font-family: var(--mono);
   font-size: 0.62rem;
