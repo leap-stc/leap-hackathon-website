@@ -84,15 +84,13 @@ const NEIGHBORHOOD_LAYERS = {
       color: '#22c55e',
       sourceId: 'src-flushing-rain-gardens',
       layerId: 'lyr-flushing-rain-gardens',
-      fetchUrl: 'https://data.cityofnewyork.us/resource/df32-vzax.geojson?' +
-        '$where=' + encodeURIComponent("latitude > 40.74 AND latitude < 40.78 AND longitude > -73.84 AND longitude < -73.78") +
-        '&$limit=1000',
+      fetchUrl: "https://data.cityofnewyork.us/resource/df32-vzax.geojson?$where=within_box(the_geom%2C40.78%2C-73.84%2C40.74%2C-73.78)%20AND%20(asset_type%3D'Rain%20Garden'%20OR%20asset_type%3D'ROWRG')&$limit=200",
       paint: {
         'circle-color': '#22c55e',
-        'circle-radius': 4,
-        'circle-opacity': 0.85,
+        'circle-radius': 5,
+        'circle-opacity': 0.9,
         'circle-stroke-color': '#16a34a',
-        'circle-stroke-width': 1
+        'circle-stroke-width': 1.5
       }
     },
     {
@@ -101,15 +99,13 @@ const NEIGHBORHOOD_LAYERS = {
       color: '#6366f1',
       sourceId: 'src-flushing-cso',
       layerId: 'lyr-flushing-cso',
-      fetchUrl: 'https://data.cityofnewyork.us/resource/df32-vzax.geojson?' +
-        '$where=' + encodeURIComponent("latitude > 40.74 AND latitude < 40.78 AND longitude > -73.84 AND longitude < -73.78 AND sewer_type = 'Combined'") +
-        '&$limit=1000',
+      fetchUrl: "https://data.cityofnewyork.us/resource/df32-vzax.geojson?$where=within_box(the_geom%2C40.78%2C-73.84%2C40.74%2C-73.78)%20AND%20sewer_type%3D'Combined'&$limit=2000",
       paint: {
         'circle-color': '#6366f1',
-        'circle-radius': 5,
-        'circle-opacity': 0.75,
+        'circle-radius': 4,
+        'circle-opacity': 0.7,
         'circle-stroke-color': '#4338ca',
-        'circle-stroke-width': 1.5
+        'circle-stroke-width': 1
       }
     }
   ]
