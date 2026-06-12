@@ -373,6 +373,25 @@ function showNeighborhoodPanel(neighborhoodId) {
 
   map.flyTo({ center: nhood.coordinates, zoom: 13, duration: 1000 });
   updateActiveNeighborhoodStyle(neighborhoodId);
+
+  // Populate and show neighborhood description bar
+  document.getElementById('nhood-name').textContent = nhood.name + ' — ' + nhood.borough;
+  document.getElementById('nhood-desc').textContent = nhood.description;
+  document.getElementById('neighborhood-state').removeAttribute('hidden');
+
+  // Build and show project cards for this neighborhood
+  const projects = PROJECTS.filter(p => p.neighborhoodId === neighborhoodId);
+  const inner = document.getElementById('neighborhood-projects-inner');
+  inner.innerHTML = projects.map(p => `
+    <div class="nhood-project-card${p.isWinner ? ' nhood-project-card--winner' : ''}">
+      ${p.isWinner ? `<span class="nhood-winner-tag">${p.isWinnerCategory}</span>` : ''}
+      <p class="nhood-project-team">${p.team}</p>
+      ${p.title ? `<p class="nhood-project-title">${p.title}</p>` : ''}
+      <p class="nhood-project-desc">${p.description}</p>
+      ${p.demoAvailable ? `<span class="nhood-demo-tag">Demo available</span>` : ''}
+    </div>
+  `).join('');
+  document.getElementById('neighborhood-projects').removeAttribute('hidden');
 }
 
 function closeNeighborhoodPanel() {
@@ -380,6 +399,10 @@ function closeNeighborhoodPanel() {
   removeRainGardens();
   map.flyTo({ center: SITE_CONFIG.mapCenter, zoom: SITE_CONFIG.mapZoom, duration: 800 });
   clearActiveNeighborhoodStyle();
+
+  document.getElementById('neighborhood-state').setAttribute('hidden', '');
+  document.getElementById('neighborhood-projects').setAttribute('hidden', '');
+  document.getElementById('neighborhood-projects-inner').innerHTML = '';
 }
 
 function updateActiveNeighborhoodStyle(id) {

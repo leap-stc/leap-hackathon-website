@@ -360,6 +360,133 @@ section { position: relative; }
   max-width: 60ch;
 }
 
+/* ---- State 2: Neighborhood bar ---- */
+#neighborhood-state {
+  flex-shrink: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+  padding: 1rem 2rem;
+  background: var(--navy);
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+}
+
+#neighborhood-state[hidden] { display: none; }
+
+#neighborhood-back-btn {
+  flex-shrink: 0;
+  background: none;
+  border: 1px solid rgba(255,255,255,0.3);
+  color: #F5F2EC;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.35rem 0.75rem;
+  cursor: pointer;
+  margin-top: 0.1rem;
+}
+
+#neighborhood-back-btn:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+#neighborhood-state-body {
+  flex: 1;
+}
+
+#nhood-name {
+  color: #F5F2EC;
+  margin: 0 0 0.35rem;
+}
+
+#nhood-desc {
+  font-size: 0.875rem;
+  line-height: 1.7;
+  color: rgba(245,242,236,0.75);
+  margin: 0;
+  max-width: 80ch;
+}
+
+/* ---- State 2: Neighborhood project cards ---- */
+#neighborhood-projects {
+  flex-shrink: 0;
+  border-top: 1px solid var(--rule);
+  background: var(--paper);
+  padding: 1.25rem 2rem;
+}
+
+#neighborhood-projects[hidden] { display: none; }
+
+#neighborhood-projects-inner {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+}
+
+.nhood-project-card {
+  flex-shrink: 0;
+  width: 240px;
+  background: #fff;
+  border: 1px solid var(--rule);
+  padding: 1rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.nhood-project-card--winner {
+  border-color: var(--navy);
+  border-width: 2px;
+}
+
+.nhood-winner-tag {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--navy);
+}
+
+.nhood-project-team {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin: 0;
+}
+
+.nhood-project-title {
+  font-size: 0.8rem;
+  font-style: italic;
+  color: #2a3a5a;
+  margin: 0;
+}
+
+.nhood-project-desc {
+  font-size: 0.775rem;
+  line-height: 1.6;
+  color: #444;
+  margin: 0;
+  flex: 1;
+}
+
+.nhood-demo-tag {
+  align-self: flex-start;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1D6B45;
+  border: 1px solid #1D6B45;
+  padding: 0.15rem 0.4rem;
+}
+
+/* ---- Layer descriptions ---- */
 #layer-descriptions {
   flex-shrink: 0;
   background: var(--paper-warm);
