@@ -342,6 +342,24 @@ section { position: relative; }
 
 #map-section-header h2 { margin: 0; }
 
+#map-intro {
+  flex-shrink: 0;
+  background: var(--paper);
+  border-bottom: 1px solid var(--rule);
+  padding: 1.25rem 2rem;
+  display: flex;
+  gap: 3rem;
+}
+
+#map-intro p {
+  flex: 1;
+  font-size: 0.875rem;
+  line-height: 1.75;
+  color: #2a3a5a;
+  margin: 0;
+  max-width: 60ch;
+}
+
 #map-section-inner {
   flex: 1;
   display: flex;
