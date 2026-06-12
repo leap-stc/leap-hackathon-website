@@ -371,6 +371,12 @@ function showNeighborhoodPanel(neighborhoodId) {
   removeRainGardens();
   if (neighborhoodId === 'flushing') loadRainGardens();
 
+  // Lock the map area to its current height so it doesn't shrink when
+  // the neighborhood description panel is inserted above it.
+  const mapInner = document.getElementById('map-section-inner');
+  mapInner.style.height = mapInner.offsetHeight + 'px';
+  mapInner.style.flex = 'none';
+
   map.flyTo({ center: nhood.coordinates, zoom: 13, duration: 1000 });
   updateActiveNeighborhoodStyle(neighborhoodId);
 
@@ -401,6 +407,11 @@ function closeNeighborhoodPanel() {
   removeRainGardens();
   map.flyTo({ center: SITE_CONFIG.mapCenter, zoom: SITE_CONFIG.mapZoom, duration: 800 });
   clearActiveNeighborhoodStyle();
+
+  // Restore the map area to flex-driven sizing
+  const mapInner = document.getElementById('map-section-inner');
+  mapInner.style.height = '';
+  mapInner.style.flex = '';
 
   document.getElementById('neighborhood-state').setAttribute('hidden', '');
   document.getElementById('neighborhood-projects').setAttribute('hidden', '');

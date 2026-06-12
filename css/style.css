@@ -325,7 +325,7 @@ section { position: relative; }
 /* ---- Map Section ---- */
 #map-section {
   margin-top: var(--header-h);
-  height: calc(100vh - var(--header-h));
+  min-height: calc(100vh - var(--header-h));
   display: flex;
   flex-direction: column;
   position: relative;
