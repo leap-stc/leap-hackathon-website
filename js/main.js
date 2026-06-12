@@ -41,23 +41,28 @@ const OVERLAY_SOURCES = {
 const LAYER_DESCRIPTIONS = {
   cloudburst: {
     title: 'Cloudburst Flooding',
-    body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. This layer maps areas at risk of stormwater flooding during moderate cloudburst events, based on NYC stormwater flood modeling. Blue zones indicate predicted inundation under moderate storm conditions across the five boroughs.'
+    body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. This layer maps areas at risk of stormwater flooding during moderate cloudburst events, based on NYC stormwater flood modeling. Blue zones indicate predicted inundation under moderate storm conditions across the five boroughs.',
+    source: 'NYC Open Data — NYC Stormwater Flood Maps'
   },
   heat: {
     title: 'Urban Heat',
-    body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mean surface temperature data from 2020–2022, sourced from NYC City Council. Warmer tones highlight neighborhoods with the greatest heat burden — typically areas with dense pavement, limited tree canopy, and lower access to cooling resources.'
+    body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mean surface temperature data from 2020–2022. Warmer tones highlight neighborhoods with the greatest heat burden — typically areas with dense pavement, limited tree canopy, and lower access to cooling resources.',
+    source: 'NYC City Council — Mean Surface Temperature 2020–2022'
   },
   pfirm: {
     title: 'PFIRM 2015 Flood Zones',
-    body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. FEMA\'s Preliminary Flood Insurance Rate Maps show regulatory flood risk zones across New York City, distinguishing between 1% annual chance (100-year) and 0.2% annual chance (500-year) floodplains based on current conditions.'
+    body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. FEMA\'s Preliminary Flood Insurance Rate Maps show regulatory flood risk zones across New York City, distinguishing between 1% annual chance (100-year) and 0.2% annual chance (500-year) floodplains based on current conditions.',
+    source: 'FEMA / NYC DCP — 2015 Preliminary Flood Insurance Rate Maps'
   },
   surge2050: {
     title: 'Coastal Surge 2050s',
-    body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Projected 100-year floodplain under 2050s sea level rise scenarios, developed by NYC Department of City Planning. This layer reflects moderate acceleration in coastal flood risk driven by rising seas and intensifying storm surge over the coming decades.'
+    body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Projected 100-year floodplain under 2050s sea level rise scenarios. This layer reflects moderate acceleration in coastal flood risk driven by rising seas and intensifying storm surge over the coming decades.',
+    source: 'NYC Department of City Planning — Future Floodplain 2050s'
   },
   surge2080: {
     title: 'Coastal Surge 2080s',
-    body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Projected 100-year floodplain under 2080s sea level rise scenarios — the most severe long-term outlook modeled by NYC DCP. Communities shown here face significant displacement and infrastructure risk by end of century without major adaptation.'
+    body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Projected 100-year floodplain under 2080s sea level rise scenarios — the most severe long-term outlook modeled by NYC DCP. Communities shown here face significant displacement and infrastructure risk by end of century without major adaptation.',
+    source: 'NYC Department of City Planning — Future Floodplain 2080s'
   }
 };
 
@@ -285,23 +290,21 @@ function setupLayerToggles() {
         map.setLayoutProperty(`overlay-${layerId}-line`, 'visibility', visibility);
       }
 
-      // Layer description panel
+      // Layer description panel — stacking per-layer blocks
+      const container = document.getElementById('layer-descriptions');
       const desc = LAYER_DESCRIPTIONS[layerId];
-      if (toggle.checked && desc) {
-        document.getElementById('ldp-title').textContent = desc.title;
-        document.getElementById('ldp-body').textContent = desc.body;
-        document.getElementById('layer-description-panel').removeAttribute('hidden');
+      if (!desc) return;
+      if (toggle.checked) {
+        const block = document.createElement('div');
+        block.className = 'layer-desc-block';
+        block.dataset.layer = layerId;
+        block.innerHTML = `<p class="label ldb-title">${desc.title}</p><p class="ldb-body">${desc.body}</p><p class="ldb-source">Source: ${desc.source}</p>`;
+        container.appendChild(block);
+        container.removeAttribute('hidden');
       } else {
-        const anyActive = Array.from(
-          document.querySelectorAll('.layer-toggle input[type="checkbox"]')
-        ).find(cb => cb !== toggle && cb.checked && LAYER_DESCRIPTIONS[cb.dataset.layer]);
-        if (anyActive) {
-          const d = LAYER_DESCRIPTIONS[anyActive.dataset.layer];
-          document.getElementById('ldp-title').textContent = d.title;
-          document.getElementById('ldp-body').textContent = d.body;
-        } else {
-          document.getElementById('layer-description-panel').setAttribute('hidden', '');
-        }
+        const block = container.querySelector(`.layer-desc-block[data-layer="${layerId}"]`);
+        if (block) block.remove();
+        if (container.children.length === 0) container.setAttribute('hidden', '');
       }
 
     });
