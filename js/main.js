@@ -124,9 +124,9 @@ const NEIGHBORHOOD_LAYERS = {
 };
 
 const PROJECT_LAYER_MAP = {
-  'gorillas':           'flushing-cloudburst',
+  'gorillas':             'flushing-cloudburst',
   'hadrosaur-footprints': 'flushing-rain-gardens',
-  'king-penguins':      'flushing-cso'
+  'king-penguins':        ['flushing-rain-gardens', 'flushing-cso']
 };
 
 // Neighborhood color map (matches content.js)
@@ -536,40 +536,37 @@ function showNeighborhoodPanel(neighborhoodId) {
 }
 
 function onProjectCardClick(projectId) {
-  const layerId = PROJECT_LAYER_MAP[projectId];
-  if (!layerId) return;
+  const mapping = PROJECT_LAYER_MAP[projectId];
+  if (!mapping) return;
+  const layerIds = Array.isArray(mapping) ? mapping : [mapping];
 
   const card = document.getElementById(`nhood-card-${projectId}`);
   const isActive = card.classList.contains('nhood-project-card--active');
 
-  // Deactivate the previously active card + layer
+  // Deactivate the previously active card + its layers
   if (activeProjectId && activeProjectId !== projectId) {
-    const prevLayerId = PROJECT_LAYER_MAP[activeProjectId];
-    const prevToggle = document.querySelector(`input[data-layer="${prevLayerId}"]`);
-    if (prevToggle && prevToggle.checked) {
-      prevToggle.checked = false;
-      prevToggle.dispatchEvent(new Event('change'));
-    }
+    const prevMapping = PROJECT_LAYER_MAP[activeProjectId];
+    const prevIds = Array.isArray(prevMapping) ? prevMapping : [prevMapping];
+    prevIds.forEach(lid => {
+      const t = document.querySelector(`input[data-layer="${lid}"]`);
+      if (t && t.checked) { t.checked = false; t.dispatchEvent(new Event('change')); }
+    });
     const prevCard = document.getElementById(`nhood-card-${activeProjectId}`);
     if (prevCard) prevCard.classList.remove('nhood-project-card--active');
   }
 
   if (isActive) {
-    // Toggle off
-    const toggle = document.querySelector(`input[data-layer="${layerId}"]`);
-    if (toggle && toggle.checked) {
-      toggle.checked = false;
-      toggle.dispatchEvent(new Event('change'));
-    }
+    layerIds.forEach(lid => {
+      const t = document.querySelector(`input[data-layer="${lid}"]`);
+      if (t && t.checked) { t.checked = false; t.dispatchEvent(new Event('change')); }
+    });
     card.classList.remove('nhood-project-card--active');
     activeProjectId = null;
   } else {
-    // Toggle on
-    const toggle = document.querySelector(`input[data-layer="${layerId}"]`);
-    if (toggle && !toggle.checked) {
-      toggle.checked = true;
-      toggle.dispatchEvent(new Event('change'));
-    }
+    layerIds.forEach(lid => {
+      const t = document.querySelector(`input[data-layer="${lid}"]`);
+      if (t && !t.checked) { t.checked = true; t.dispatchEvent(new Event('change')); }
+    });
     card.classList.add('nhood-project-card--active');
     activeProjectId = projectId;
   }
