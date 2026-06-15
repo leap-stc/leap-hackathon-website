@@ -73,11 +73,23 @@ const LAYER_DESCRIPTIONS = {
     title: 'Combined Sewer Overflow',
     body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In combined sewer areas, a single pipe carries both stormwater and sewage. During heavy rain events, the system overflows directly into waterways. This layer shows DEP green infrastructure assets specifically built in combined sewer drainage areas to reduce overflow frequency and volume.',
     source: 'NYC DEP — Green Infrastructure Map'
+  },
+  'flushing-cloudburst': {
+    title: 'Cloudburst Flooding — Flushing',
+    body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. This layer maps areas at risk of stormwater flooding during moderate cloudburst events across the Flushing / Queens area. Blue zones indicate predicted inundation under moderate storm conditions, based on NYC stormwater flood modeling.',
+    source: 'NYC Open Data — NYC Stormwater Flood Maps'
   }
 };
 
 const NEIGHBORHOOD_LAYERS = {
   flushing: [
+    {
+      id: 'flushing-cloudburst',
+      label: 'Cloudburst Flooding',
+      color: '#5B8DD9',
+      kind: 'global-overlay',
+      globalLayerId: 'cloudburst'
+    },
     {
       id: 'flushing-rain-gardens',
       label: 'Rain Gardens',
@@ -111,6 +123,12 @@ const NEIGHBORHOOD_LAYERS = {
   ]
 };
 
+const PROJECT_LAYER_MAP = {
+  'gorillas':           'flushing-cloudburst',
+  'hadrosaur-footprints': 'flushing-rain-gardens',
+  'king-penguins':      'flushing-cso'
+};
+
 // Neighborhood color map (matches content.js)
 const NHOOD_COLORS = {
   'east-harlem': '#C8373A',
@@ -125,6 +143,7 @@ const NHOOD_COLORS = {
 let map;
 let activeNeighborhood = null;
 let neighborhoodGeometries = {};
+let activeProjectId = null;
 
 function initMap() {
   mapboxgl.accessToken = SITE_CONFIG.mapboxToken;
@@ -386,6 +405,15 @@ function fetchAndAddNeighborhoodLayer(cfg, polygon) {
 }
 
 function removeNeighborhoodLayer(cfg) {
+  if (cfg.kind === 'global-overlay') {
+    ['', '-line'].forEach(suffix => {
+      const lid = `overlay-${cfg.globalLayerId}${suffix}`;
+      if (map.getLayer(lid)) map.setLayoutProperty(lid, 'visibility', 'none');
+    });
+    const globalCb = document.querySelector(`.layer-toggle input[data-layer="${cfg.globalLayerId}"]`);
+    if (globalCb) globalCb.checked = false;
+    return;
+  }
   if (map.getLayer(cfg.layerId)) map.removeLayer(cfg.layerId);
   if (map.getSource(cfg.sourceId)) map.removeSource(cfg.sourceId);
 }
@@ -429,10 +457,17 @@ function showNeighborhoodLayers(neighborhoodId) {
     cb.addEventListener('change', () => {
       const cfg = layers.find(l => l.id === cb.dataset.layer);
       if (!cfg) return;
-      if (cb.checked) {
-        fetchAndAddNeighborhoodLayer(cfg, polygon);
+      if (cfg.kind === 'global-overlay') {
+        const vis = cb.checked ? 'visible' : 'none';
+        ['', '-line'].forEach(suffix => {
+          const lid = `overlay-${cfg.globalLayerId}${suffix}`;
+          if (map.getLayer(lid)) map.setLayoutProperty(lid, 'visibility', vis);
+        });
+        const globalCb = document.querySelector(`.layer-toggle input[data-layer="${cfg.globalLayerId}"]`);
+        if (globalCb) globalCb.checked = cb.checked;
       } else {
-        removeNeighborhoodLayer(cfg);
+        if (cb.checked) fetchAndAddNeighborhoodLayer(cfg, polygon);
+        else removeNeighborhoodLayer(cfg);
       }
       setLayerDescriptionVisible(cb.dataset.layer, cb.checked);
     });
@@ -482,21 +517,68 @@ function showNeighborhoodPanel(neighborhoodId) {
   const projects = PROJECTS.filter(p => p.neighborhoodId === neighborhoodId);
   const inner = document.getElementById('neighborhood-projects-inner');
   inner.style.gridTemplateColumns = `repeat(${projects.length}, 1fr)`;
-  inner.innerHTML = projects.map(p => `
-    <div class="nhood-project-card${p.isWinner ? ' nhood-project-card--winner' : ''}">
-      ${p.isWinner ? `<span class="nhood-winner-tag">${p.isWinnerCategory}</span>` : ''}
-      <p class="nhood-project-team">${p.team}</p>
-      ${p.title ? `<p class="nhood-project-title">${p.title}</p>` : ''}
-      <p class="nhood-project-desc">${p.description}</p>
-      ${p.demoAvailable ? `<span class="nhood-demo-tag">Demo available</span>` : ''}
-    </div>
-  `).join('');
+  inner.innerHTML = projects.map(p => {
+    const hasLayer = !!PROJECT_LAYER_MAP[p.id];
+    return `
+      <div class="nhood-project-card${p.isWinner ? ' nhood-project-card--winner' : ''}${hasLayer ? ' nhood-project-card--linked' : ''}"
+           id="nhood-card-${p.id}"
+           ${hasLayer ? `onclick="onProjectCardClick('${p.id}')"` : ''}>
+        ${p.isWinner ? `<span class="nhood-winner-tag">${p.isWinnerCategory}</span>` : ''}
+        <p class="nhood-project-team">${p.team}</p>
+        ${p.title ? `<p class="nhood-project-title">${p.title}</p>` : ''}
+        <p class="nhood-project-desc">${p.description}</p>
+        ${p.demoAvailable ? `<span class="nhood-demo-tag">Demo available</span>` : ''}
+        ${hasLayer ? `<span class="nhood-layer-hint">Click to explore layer →</span>` : ''}
+      </div>
+    `;
+  }).join('');
   document.getElementById('neighborhood-projects').removeAttribute('hidden');
+}
+
+function onProjectCardClick(projectId) {
+  const layerId = PROJECT_LAYER_MAP[projectId];
+  if (!layerId) return;
+
+  const card = document.getElementById(`nhood-card-${projectId}`);
+  const isActive = card.classList.contains('nhood-project-card--active');
+
+  // Deactivate the previously active card + layer
+  if (activeProjectId && activeProjectId !== projectId) {
+    const prevLayerId = PROJECT_LAYER_MAP[activeProjectId];
+    const prevToggle = document.querySelector(`input[data-layer="${prevLayerId}"]`);
+    if (prevToggle && prevToggle.checked) {
+      prevToggle.checked = false;
+      prevToggle.dispatchEvent(new Event('change'));
+    }
+    const prevCard = document.getElementById(`nhood-card-${activeProjectId}`);
+    if (prevCard) prevCard.classList.remove('nhood-project-card--active');
+  }
+
+  if (isActive) {
+    // Toggle off
+    const toggle = document.querySelector(`input[data-layer="${layerId}"]`);
+    if (toggle && toggle.checked) {
+      toggle.checked = false;
+      toggle.dispatchEvent(new Event('change'));
+    }
+    card.classList.remove('nhood-project-card--active');
+    activeProjectId = null;
+  } else {
+    // Toggle on
+    const toggle = document.querySelector(`input[data-layer="${layerId}"]`);
+    if (toggle && !toggle.checked) {
+      toggle.checked = true;
+      toggle.dispatchEvent(new Event('change'));
+    }
+    card.classList.add('nhood-project-card--active');
+    activeProjectId = projectId;
+  }
 }
 
 function closeNeighborhoodPanel() {
   if (activeNeighborhood) hideNeighborhoodLayers(activeNeighborhood);
   activeNeighborhood = null;
+  activeProjectId = null;
   map.flyTo({ center: SITE_CONFIG.mapCenter, zoom: SITE_CONFIG.mapZoom, duration: 800 });
   clearActiveNeighborhoodStyle();
 

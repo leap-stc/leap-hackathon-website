@@ -458,6 +458,35 @@ section { position: relative; }
   border-width: 2px;
 }
 
+.nhood-project-card--linked {
+  cursor: pointer;
+}
+
+.nhood-project-card--linked:hover {
+  border-color: #999;
+}
+
+.nhood-project-card--active {
+  border-color: var(--navy) !important;
+  border-width: 2px !important;
+  background: #f0f4ff;
+}
+
+.nhood-layer-hint {
+  align-self: flex-start;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #888;
+  margin-top: auto;
+}
+
+.nhood-project-card--active .nhood-layer-hint {
+  color: var(--navy);
+}
+
 .nhood-winner-tag {
   font-family: 'Montserrat', sans-serif;
   font-size: 0.58rem;
