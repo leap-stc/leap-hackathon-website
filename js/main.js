@@ -87,8 +87,12 @@ const NEIGHBORHOOD_LAYERS = {
       id: 'flushing-cloudburst',
       label: 'Cloudburst Flooding',
       color: '#5B8DD9',
-      kind: 'global-overlay',
-      globalLayerId: 'cloudburst'
+      kind: 'filtered-overlay',
+      sourceId: 'overlay-cloudburst',
+      layerId: 'lyr-flushing-cloudburst',
+      lineLayerId: 'lyr-flushing-cloudburst-line',
+      fillPaint: { 'fill-color': '#5B8DD9', 'fill-opacity': 0.55 },
+      linePaint: { 'line-color': '#5B8DD9', 'line-width': 1, 'line-opacity': 0.8 }
     },
     {
       id: 'flushing-rain-gardens',
@@ -405,13 +409,9 @@ function fetchAndAddNeighborhoodLayer(cfg, polygon) {
 }
 
 function removeNeighborhoodLayer(cfg) {
-  if (cfg.kind === 'global-overlay') {
-    ['', '-line'].forEach(suffix => {
-      const lid = `overlay-${cfg.globalLayerId}${suffix}`;
-      if (map.getLayer(lid)) map.setLayoutProperty(lid, 'visibility', 'none');
-    });
-    const globalCb = document.querySelector(`.layer-toggle input[data-layer="${cfg.globalLayerId}"]`);
-    if (globalCb) globalCb.checked = false;
+  if (cfg.kind === 'filtered-overlay') {
+    if (map.getLayer(cfg.lineLayerId)) map.removeLayer(cfg.lineLayerId);
+    if (map.getLayer(cfg.layerId)) map.removeLayer(cfg.layerId);
     return;
   }
   if (map.getLayer(cfg.layerId)) map.removeLayer(cfg.layerId);
@@ -457,14 +457,16 @@ function showNeighborhoodLayers(neighborhoodId) {
     cb.addEventListener('change', () => {
       const cfg = layers.find(l => l.id === cb.dataset.layer);
       if (!cfg) return;
-      if (cfg.kind === 'global-overlay') {
-        const vis = cb.checked ? 'visible' : 'none';
-        ['', '-line'].forEach(suffix => {
-          const lid = `overlay-${cfg.globalLayerId}${suffix}`;
-          if (map.getLayer(lid)) map.setLayoutProperty(lid, 'visibility', vis);
-        });
-        const globalCb = document.querySelector(`.layer-toggle input[data-layer="${cfg.globalLayerId}"]`);
-        if (globalCb) globalCb.checked = cb.checked;
+      if (cfg.kind === 'filtered-overlay') {
+        if (cb.checked) {
+          if (!map.getLayer(cfg.layerId)) {
+            const filter = polygon ? ['within', polygon] : undefined;
+            map.addLayer({ id: cfg.layerId, type: 'fill', source: cfg.sourceId, paint: cfg.fillPaint, ...(filter && { filter }) });
+            map.addLayer({ id: cfg.lineLayerId, type: 'line', source: cfg.sourceId, paint: cfg.linePaint, ...(filter && { filter }) });
+          }
+        } else {
+          removeNeighborhoodLayer(cfg);
+        }
       } else {
         if (cb.checked) fetchAndAddNeighborhoodLayer(cfg, polygon);
         else removeNeighborhoodLayer(cfg);
