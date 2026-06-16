@@ -324,7 +324,7 @@ section { position: relative; }
 
 /* ---- Map Section ---- */
 #map-header-area {
-  margin-top: var(--header-h);
+  padding-top: var(--header-h);
 }
 
 #map-frame {

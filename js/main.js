@@ -688,7 +688,7 @@ function animateHeroBoroughTags() {
 
 // ---- Nav scroll behavior ----
 function setupNav() {
-  const sections = ['map-section', 'projects-section', 'winners-section', 'about-section', 'resources-section'];
+  const sections = ['map-header-area', 'projects-section', 'winners-section', 'about-section', 'resources-section'];
   const links = document.querySelectorAll('nav a[data-section]');
 
   window.addEventListener('scroll', () => {
