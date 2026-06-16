@@ -333,7 +333,7 @@ section { position: relative; }
 }
 
 #map-section {
-  min-height: 70vh;
+  min-height: 55vh;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -355,15 +355,15 @@ section { position: relative; }
 #map-intro {
   background: var(--paper);
   border-bottom: 1px solid var(--rule);
-  padding: 1.25rem 2rem;
+  padding: 0.75rem 2rem;
   display: flex;
   gap: 3rem;
 }
 
 #map-intro p {
   flex: 1;
-  font-size: 0.875rem;
-  line-height: 1.75;
+  font-size: 0.8rem;
+  line-height: 1.55;
   color: #2a3a5a;
   margin: 0;
   max-width: 60ch;
