@@ -333,7 +333,7 @@ section { position: relative; }
 }
 
 #map-section {
-  min-height: calc(100vh - var(--header-h) - 3rem);
+  min-height: 70vh;
   display: flex;
   flex-direction: column;
   position: relative;
