@@ -323,13 +323,21 @@ section { position: relative; }
 }
 
 /* ---- Map Section ---- */
-#map-section {
+#map-frame {
   margin-top: var(--header-h);
-  min-height: calc(100vh - var(--header-h));
+  padding: 1.5rem 2rem;
+  background: var(--bg);
+}
+
+#map-section {
+  min-height: calc(100vh - var(--header-h) - 3rem);
   display: flex;
   flex-direction: column;
   position: relative;
   background: var(--map-bg);
+  border: 1px solid var(--rule);
+  box-shadow: 0 2px 16px rgba(1,33,105,0.08);
+  overflow: hidden;
 }
 
 #map-section-header {
@@ -431,9 +439,11 @@ section { position: relative; }
 
 /* ---- State 2: Neighborhood project cards ---- */
 #neighborhood-projects {
-  border-top: 1px solid var(--rule);
   background: var(--paper);
   padding: 1.25rem 2rem;
+  border: 1px solid var(--rule);
+  border-top: none;
+  box-shadow: 0 2px 16px rgba(1,33,105,0.08);
 }
 
 #neighborhood-projects[hidden] { display: none; }
@@ -534,7 +544,8 @@ section { position: relative; }
 /* ---- Layer descriptions ---- */
 #layer-descriptions {
   background: var(--paper-warm);
-  border-top: 1px solid var(--rule);
+  border: 1px solid var(--rule);
+  border-top: none;
 }
 
 #layer-descriptions[hidden] { display: none; }
