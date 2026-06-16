@@ -323,8 +323,11 @@ section { position: relative; }
 }
 
 /* ---- Map Section ---- */
-#map-frame {
+#map-header-area {
   margin-top: var(--header-h);
+}
+
+#map-frame {
   padding: 1.5rem 2rem;
   background: var(--bg);
 }
@@ -341,7 +344,6 @@ section { position: relative; }
 }
 
 #map-section-header {
-  flex-shrink: 0;
   margin: 0;
   padding: 0.875rem 2rem;
   border-bottom: 3px solid var(--navy);
@@ -351,7 +353,6 @@ section { position: relative; }
 #map-section-header h2 { margin: 0; }
 
 #map-intro {
-  flex-shrink: 0;
   background: var(--paper);
   border-bottom: 1px solid var(--rule);
   padding: 1.25rem 2rem;
